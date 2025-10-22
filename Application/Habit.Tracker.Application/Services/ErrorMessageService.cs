@@ -35,7 +35,10 @@ namespace Habit.Tracker.Application.Services
         public string HabitWithSameNameExists => _localizer["Another habit with the same name already exists"];
 
         //SCHEDULING MESSAGES 
+        public string SchedulerNotFound => _localizer["Scheduler not found"];
         public string WrongPeriodType => _localizer["Wrong Period Type"];
         public string DailyHabitNotFound => _localizer["Daily habit not found"];
+        public string ThisTimerAlreadyExist => _localizer["This timer already exists"];
+
     }
 }

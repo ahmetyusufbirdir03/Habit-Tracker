@@ -2,6 +2,7 @@
 using Habit.Tracker.Infrustructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using SendGrid.Helpers.Mail;
 using System.Linq.Expressions;
 
 namespace Habit.Tracker.Infrastructure.Repositories;
@@ -32,8 +33,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
 
     public async Task DeleteAsync(T entity)
     {
-        _dbSet.Remove(entity);                         
-        await _dbContext.SaveChangesAsync();   
+        _dbSet.Remove(entity);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null)
@@ -80,10 +81,16 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<T> UpdateAsync(T entity)
+    public async Task<T> UpdateAsync(T entity)  
     {
         _dbSet.Update(entity);                          
         await _dbContext.SaveChangesAsync();   
         return entity;
+    }
+
+    public async Task RemoveRangeAsync(IEnumerable<T> entities)
+    {
+        _dbSet.RemoveRange(entities);
+        await _dbContext.SaveChangesAsync();
     }
 }

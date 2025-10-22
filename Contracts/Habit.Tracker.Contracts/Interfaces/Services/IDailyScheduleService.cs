@@ -10,5 +10,6 @@ public interface IDailyScheduleService
     public Task<ResponseDto<NoContentDto>> CreateDailyScheduleAsync(CreateDailyScheduleRequestDto request);
     public Task<ResponseDto<NoContentDto>> UpdateDailyScheduleAsync(UpdateDailySchedulerRequestDto request);
     public Task<ResponseDto<IList<DailyHabitResponseDto>>> GetHabitSchedulesAsync(Guid habitId);
+    public Task<ResponseDto<NoContentDto>> ClearHabitSchedulesAsync(Guid habitId);
 }
 

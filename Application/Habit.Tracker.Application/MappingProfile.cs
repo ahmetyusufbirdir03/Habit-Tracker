@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Habit.Tracker.Contracts.Dtos.DailyHabit.Create;
 using Habit.Tracker.Contracts.Dtos.DailySchedule;
 using Habit.Tracker.Contracts.Dtos.Habit;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
@@ -23,6 +24,7 @@ namespace Habit.Tracker.Application
             CreateMap<HabitEntity,HabitDetailDto>();
             CreateMap<HabitEntity, HabitResponseDto>();
             CreateMap<HabitDaily, DailyHabitResponseDto>();
+            CreateMap<CreateDailyScheduleDto, HabitDaily>();
         }
     }
 }

@@ -12,9 +12,6 @@ public class HabitConfig : IEntityTypeConfiguration<HabitEntity>
 
         builder.HasKey(h => h.Id);
 
-        builder.Property(h => h.Id)
-               .ValueGeneratedOnAdd();
-
         builder.Property(h => h.Name)
                .IsRequired()
                .HasMaxLength(100);
@@ -34,7 +31,7 @@ public class HabitConfig : IEntityTypeConfiguration<HabitEntity>
 
         builder.Property(h => h.IsActive)
                .IsRequired()
-               .HasDefaultValue(true);
+               .HasDefaultValue(false);
 
         builder.Property(h => h.Notes)
                .HasMaxLength(1000)

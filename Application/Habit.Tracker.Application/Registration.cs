@@ -1,9 +1,7 @@
 ﻿using Habit.Tracker.Application.Services;
 using Habit.Tracker.Application.Services.TokenServices;
 using Habit.Tracker.Contracts.Interfaces.Services;
-using Habit.Tracker.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;

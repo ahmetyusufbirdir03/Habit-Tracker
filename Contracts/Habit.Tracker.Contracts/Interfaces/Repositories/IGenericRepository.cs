@@ -11,4 +11,6 @@ public interface IGenericRepository<T> where T : class
     Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null);
     Task<T?> GetByIdAsync(Guid Id, params Expression<Func<T, object>>[] includes);
     Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+    Task RemoveRangeAsync(IEnumerable<T> entities);
+
 }
