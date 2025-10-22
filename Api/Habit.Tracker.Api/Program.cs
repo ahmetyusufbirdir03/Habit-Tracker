@@ -1,4 +1,4 @@
-using DotNetEnv;
+﻿using DotNetEnv;
 using FluentValidation.AspNetCore;
 using Habit.Tracker.Api.Middleware.ExceptionMiddleware;
 using Habit.Tracker.Application;
@@ -9,7 +9,30 @@ using Habit.Tracker.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Load();
+Console.WriteLine("========== APPLICATION STARTING ==========");
+Console.WriteLine($"Current Directory: {Directory.GetCurrentDirectory()}");
+
+var currentDir = Directory.GetCurrentDirectory();
+
+var apiDir = Directory.GetParent(currentDir)?.FullName;
+
+var solutionRoot = Directory.GetParent(apiDir ?? "")?.FullName;
+
+var envPath = Path.Combine(solutionRoot ?? "", ".env");
+
+Console.WriteLine($"Solution Root: {solutionRoot}");
+Console.WriteLine($".env Path: {envPath}");
+Console.WriteLine($".env Exists: {File.Exists(envPath)}");
+
+if (File.Exists(envPath))
+{
+    Env.Load(envPath);
+    Console.WriteLine(".env loaded successfully!");
+}
+else
+{
+    Console.WriteLine(".env NOT FOUND!");
+}
 
 builder.Configuration.AddEnvironmentVariables();
 
