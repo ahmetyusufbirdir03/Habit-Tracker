@@ -46,14 +46,6 @@ namespace Habit.Tracker.Api.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> ActivateHabit(Guid id)
-        {
-            var response = await _habitService.ActivateHabitAsync(id);
-
-            return StatusCode(response.StatusCode, response);
-        }
-
         [HttpPatch]
         public async Task<IActionResult> UpdateHabit(UpdateHabitRequestDto request)
         {

@@ -23,12 +23,28 @@ namespace Habit.Tracker.Application
             CreateMap<HabitGroupCreateRequestDto, HabitGroup>();
             CreateMap<HabitGroup, HabitGroupResponseDto>();
             CreateMap<CreateHabitRequestDto, HabitEntity>();
-            CreateMap<HabitEntity,HabitDetailDto>();
             CreateMap<HabitEntity, HabitResponseDto>();
             CreateMap<HabitDaily, DailyHabitResponseDto>();
             CreateMap<HabitWeekly, WeeklySchedulerResponseDto>();
             CreateMap<CreateDailyScheduleDto, HabitDaily>();
             CreateMap<HabitMonthly, MonthlySchedulerResponseDto>();
+
+            CreateMap<HabitEntity, HabitDetailDto>()
+            .ForMember(dest => dest.HabitGroupId, opt => opt.MapFrom(src => src.HabitGroupId))
+            .ForMember(dest => dest.DailySchedules, opt => opt.MapFrom(src => src.DailySchedules))
+            .ForMember(dest => dest.WeeklySchedules, opt => opt.MapFrom(src => src.WeeklySchedules))
+            .ForMember(dest => dest.MonthlySchedules, opt => opt.MapFrom(src => src.MonthlySchedules));
+
+            // DailySchedules map
+            CreateMap<HabitDaily, HabitDailyDto>();
+
+            // WeeklySchedules map
+            CreateMap<HabitWeekly, HabitWeeklyDto>()
+                .ForMember(dest => dest.DayOfWeek, opt => opt.MapFrom(src => src.DayOfWeek.ToString()));
+            // Enum -> string dönüşümü için ToString()
+
+            // MonthlySchedules map
+            CreateMap<HabitMonthly, HabitMonthlyDto>();
         }
     }
 }

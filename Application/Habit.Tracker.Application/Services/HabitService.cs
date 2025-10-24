@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Habit.Tracker.Contracts.Dtos;
-using Habit.Tracker.Contracts.Dtos.Habit;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
 using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
@@ -77,16 +76,16 @@ public class HabitService : IHabitService
         return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 
-    public async Task<ResponseDto<IList<HabitResponseDto>>> GetAllHabits()
+    public async Task<ResponseDto<IList<HabitDetailDto>>> GetAllHabits()
     {
-        var habits = await _unitOfWork.GetGenericRepository<HabitEntity>().GetAllAsync();
+        var habits = await _habitRepository.GetHabitsWithSchedulersAsync();
 
         if(habits == null)
-            return ResponseDto<IList<HabitResponseDto>>.Fail(_errorMessageService.HabitNotFound,StatusCodes.Status404NotFound);
+            return ResponseDto<IList<HabitDetailDto>>.Fail(_errorMessageService.HabitNotFound,StatusCodes.Status404NotFound);
 
-        var _habits = _mapper.Map<IList<HabitResponseDto>>(habits);
+        var _habits = _mapper.Map<IList<HabitDetailDto>>(habits);
 
-        return ResponseDto<IList<HabitResponseDto>>.Success(_habits);
+        return ResponseDto<IList<HabitDetailDto>>.Success(_habits);
     }
 
     public async Task<ResponseDto<IList<HabitDetailDto>>> GetUserHabitsAsync(Guid userId)
@@ -122,17 +121,6 @@ public class HabitService : IHabitService
 
         await _unitOfWork.GetGenericRepository<HabitEntity>().UpdateAsync(habit);
 
-        return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
-    }
-
-    public async Task<ResponseDto<NoContentDto>> ActivateHabitAsync(Guid id)
-    {
-        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(id);
-        if (habit == null)
-            return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
-
-        habit.IsActive = true;
-        await _unitOfWork.GetGenericRepository<HabitEntity>().UpdateAsync(habit);
         return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 }
