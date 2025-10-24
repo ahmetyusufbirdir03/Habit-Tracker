@@ -6,6 +6,7 @@ using Habit.Tracker.Contracts.Dtos.Habit.Create;
 using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
 using Habit.Tracker.Contracts.Dtos.HabitGroup;
 using Habit.Tracker.Contracts.Dtos.HabitGroup.Create;
+using Habit.Tracker.Contracts.Dtos.MonthlyScheduler;
 using Habit.Tracker.Contracts.Dtos.User;
 using Habit.Tracker.Contracts.Dtos.User.Register;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler;
@@ -27,6 +28,7 @@ namespace Habit.Tracker.Application
             CreateMap<HabitDaily, DailyHabitResponseDto>();
             CreateMap<HabitWeekly, WeeklySchedulerResponseDto>();
             CreateMap<CreateDailyScheduleDto, HabitDaily>();
+            CreateMap<HabitMonthly, MonthlySchedulerResponseDto>();
         }
     }
 }

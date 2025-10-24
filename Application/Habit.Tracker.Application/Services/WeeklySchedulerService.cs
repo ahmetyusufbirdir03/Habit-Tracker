@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Habit.Tracker.Contracts.Dtos;
-using Habit.Tracker.Contracts.Dtos.DailySchedule;
+﻿namespace Habit.Tracker.Application.Services;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Create;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Update;
@@ -131,7 +129,10 @@ public class WeeklySchedulerService : IWeeklySchedulerService
         if (weeklyScheduler == null)
             return ResponseDto<NoContentDto>.Fail(_errorMessageService.SchedulerNotFound, StatusCodes.Status404NotFound);
 
-        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(weeklyScheduler.HabitId, h => h.DailySchedules);
+        if(weeklyScheduler.ReminderTime == request.ReminderTime && weeklyScheduler.DayOfWeek == request.DayOfWeek)
+            return ResponseDto<NoContentDto>.Fail($"Bu haftanın {request.DayOfWeek}'ü için {request.ReminderTime} saatinde bir hatırlatıcı zaten var. Lütfen farklı bir zaman seçiniz.", StatusCodes.Status409Conflict);
+
+        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(weeklyScheduler.HabitId, h => h.WeeklySchedules);
 
         if (habit == null)
             return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
@@ -139,12 +140,12 @@ public class WeeklySchedulerService : IWeeklySchedulerService
         if (habit.WeeklySchedules.IsNullOrEmpty())
             return ResponseDto<NoContentDto>.Fail(_errorMessageService.SchedulerNotFound, StatusCodes.Status404NotFound);
 
-        foreach (var scheduler in habit.WeeklySchedules)
-        {
-            if (scheduler.ReminderTime == request.ReminderTime)
-                return ResponseDto<NoContentDto>.Fail(_errorMessageService.ThisTimerAlreadyExist, StatusCodes.Status404NotFound);
-        }
+        bool hasDuplicate = habit.WeeklySchedules
+            .Any(x => x.Id != weeklyScheduler.Id && x.DayOfWeek == request.DayOfWeek);
+        if (hasDuplicate)
+            return ResponseDto<NoContentDto>.Fail($"Bu haftanın {request.DayOfWeek} günü için bir hatırlatıcı zaten var. Lütfen farklı bir gün seçiniz.", StatusCodes.Status409Conflict);
 
+        weeklyScheduler.DayOfWeek = request.DayOfWeek;
         weeklyScheduler.UpdatedDate = DateTime.UtcNow;
         weeklyScheduler.ReminderTime = request.ReminderTime;
 
@@ -152,4 +153,5 @@ public class WeeklySchedulerService : IWeeklySchedulerService
 
         return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
+
 }
