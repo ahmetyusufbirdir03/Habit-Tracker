@@ -1,6 +1,4 @@
-﻿using Habit.Tracker.Application.Services;
-using Habit.Tracker.Contracts.Dtos.DailySchedule.Update;
-using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Create;
+﻿using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Create;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Update;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;

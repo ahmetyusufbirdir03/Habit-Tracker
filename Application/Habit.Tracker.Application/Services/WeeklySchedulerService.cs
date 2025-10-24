@@ -1,4 +1,5 @@
-﻿namespace Habit.Tracker.Application.Services;
+﻿using AutoMapper;
+using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Create;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Update;
