@@ -6,6 +6,7 @@ using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Update;
 using Habit.Tracker.Contracts.Interfaces;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Habit.Tracker.Domain.Entities;
+using Habit.Tracker.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 
