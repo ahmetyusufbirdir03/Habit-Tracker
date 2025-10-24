@@ -20,6 +20,11 @@ public static class Registration
         services.AddScoped(typeof(IHabitGroupService), typeof(HabitGroupService));
         services.AddScoped(typeof(IHabitService), typeof(HabitService));
         services.AddScoped(typeof(IDailyScheduleService), typeof(DailyScheduleService));
+<<<<<<< Updated upstream
+=======
+        services.AddScoped(typeof(IWeeklySchedulerService), typeof(WeeklySchedulerService));
+        services.AddScoped(typeof(IMonthlySchedulerService), typeof(MonthlySchedulerService));
+>>>>>>> Stashed changes
 
         services.AddScoped<ErrorMessageService>();
 
