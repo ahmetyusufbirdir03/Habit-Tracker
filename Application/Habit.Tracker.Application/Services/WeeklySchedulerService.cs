@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
 ﻿namespace Habit.Tracker.Application.Services;
-=======
-﻿using AutoMapper;
-using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Create;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Update;
@@ -12,12 +8,11 @@ using Habit.Tracker.Domain.Entities;
 using Habit.Tracker.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
->>>>>>> Stashed changes
 
-public class WeeklySchedulerService
+namespace Habit.Tracker.Application.Services;
+
+public class WeeklySchedulerService : IWeeklySchedulerService
 {
-<<<<<<< Updated upstream
-=======
     private readonly IUnitOfWork _unitOfWork;
     private readonly ErrorMessageService _errorMessageService;
     private readonly IMapper _mapper;
@@ -158,5 +153,5 @@ public class WeeklySchedulerService
 
         return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
->>>>>>> Stashed changes
+
 }
