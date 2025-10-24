@@ -20,6 +20,7 @@ public static class Registration
         services.AddScoped(typeof(IHabitGroupService), typeof(HabitGroupService));
         services.AddScoped(typeof(IHabitService), typeof(HabitService));
         services.AddScoped(typeof(IDailyScheduleService), typeof(DailyScheduleService));
+        services.AddScoped(typeof(IWeeklySchedulerService), typeof(WeeklySchedulerService));
 
         services.AddScoped<ErrorMessageService>();
 

@@ -1,6 +1,4 @@
-﻿using Habit.Tracker.Domain.Entities;
-
-namespace Habit.Tracker.Contracts.Dtos.DailySchedule;
+﻿namespace Habit.Tracker.Contracts.Dtos.DailySchedule;
 
 public class DailyHabitResponseDto
 {

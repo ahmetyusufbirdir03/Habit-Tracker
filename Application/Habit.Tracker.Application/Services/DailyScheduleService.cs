@@ -90,7 +90,7 @@ public class DailyScheduleService : IDailyScheduleService
             .GetAllAsync(x => x.HabitId == habitId);
         
         if (dailyHabits.IsNullOrEmpty())
-            return ResponseDto<IList<DailyHabitResponseDto>>.Fail(_errorMessageService.DailyHabitNotFound, StatusCodes.Status404NotFound);
+            return ResponseDto<IList<DailyHabitResponseDto>>.Fail(_errorMessageService.SchedulerNotFound, StatusCodes.Status404NotFound);
 
         var _dailyHabits = _mapper.Map<IList<DailyHabitResponseDto>>(dailyHabits);
 
