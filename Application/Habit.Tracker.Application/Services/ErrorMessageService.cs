@@ -15,6 +15,8 @@ namespace Habit.Tracker.Application.Services
         public string TokenNotFound => _localizer["Authentication token not found"];
         public string InvalidOrExpiredToken => _localizer["Invalid or expired authentication token"];
 
+        public string SessionExpired => _localizer["This token is expired"];
+
         // USER MESSAGES
         public string UserNotFound => _localizer["User not found"];
         public string EmailAlreadyRegistered => _localizer["Email address is already registered"];
@@ -40,6 +42,8 @@ namespace Habit.Tracker.Application.Services
         public string ThisTimerAlreadyExist => _localizer["This timer already exists"];
         public string ScheduleDaysConflict => _localizer["The days are conflicts each other. Please choose unique days"];
         public string HasAlreadySchedulers => _localizer["This habit already has schedulers"];
+
+        //
 
     }
 }

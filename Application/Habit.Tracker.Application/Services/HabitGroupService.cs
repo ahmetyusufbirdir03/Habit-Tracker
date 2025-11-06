@@ -3,8 +3,6 @@ using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.HabitGroup;
 using Habit.Tracker.Contracts.Dtos.HabitGroup.Create;
 using Habit.Tracker.Contracts.Dtos.HabitGroup.Update;
-using Habit.Tracker.Contracts.Dtos.User;
-using Habit.Tracker.Contracts.Dtos.User.Login;
 using Habit.Tracker.Contracts.Interfaces;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Habit.Tracker.Domain.Entities;
@@ -40,10 +38,10 @@ public class HabitGroupService : IHabitGroupService
         User? user = await _unitOfWork.GetGenericRepository<User>().GetByIdAsync(request.UserId);
 
         if (user is null)
-            return ResponseDto<NoContentDto>.Fail(_errorMessageService.UserNotFound, StatusCodes.Status400BadRequest);
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.UserNotFound, StatusCodes.Status404NotFound);
 
         // GROUP NAME CHECK
-        bool isNameExist = await _unitOfWork.GetGenericRepository<HabitGroup>().AnyAsync(x => x.Name == request.Name && user.Id == request.UserId);
+        bool isNameExist = await _unitOfWork.GetGenericRepository<HabitGroup>().AnyAsync(x => x.Name == request.Name && x.Id == request.UserId);
         
         if(isNameExist)
             return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitGroupNameAlreadyExists, StatusCodes.Status400BadRequest);
@@ -55,6 +53,7 @@ public class HabitGroupService : IHabitGroupService
         habitGroup.Id = Guid.NewGuid();
         habitGroup.CreatedDate = DateTime.UtcNow;
         habitGroup.Habits = new List<HabitEntity>();
+        habitGroup.CreatedBy = user.Id.ToString();
 
         await _unitOfWork.GetGenericRepository<HabitGroup>().CreateAsync(habitGroup);
 

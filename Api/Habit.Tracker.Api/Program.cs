@@ -4,6 +4,7 @@ using Habit.Tracker.Api.Middleware.ExceptionMiddleware;
 using Habit.Tracker.Application;
 using Habit.Tracker.Contracts;
 using Habit.Tracker.Infrastructure;
+using Microsoft.OpenApi.Models;
 
 
 
@@ -44,6 +45,42 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddContracts(builder.Configuration);
 builder.Services.AddTransient<ExceptionMiddleware>();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "HABIT TRACKER",
+        Version = "v1",
+        Description = "Habit Tracker Swagger Client"
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme()
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
+
+
 
 
 var app = builder.Build();
