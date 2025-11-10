@@ -14,7 +14,8 @@ public class CreateHabitRequestValidator : AbstractValidator<CreateHabitRequestD
             .IsInEnum().WithMessage("Geçersiz periyot tipi");
 
         RuleFor(x => x.Frequency)
-            .GreaterThan(0).WithMessage("Frekans 0’dan büyük olmalıdır");
+            .GreaterThan(0).WithMessage("Frekans 0’dan büyük olmalıdır")
+            .LessThanOrEqualTo(4).WithMessage("Frekans 5’ten küçük olmalıdır");
 
         RuleFor(x => x.HabitGroupId)
             .NotEmpty().WithMessage("HabitGroupId boş olamaz");

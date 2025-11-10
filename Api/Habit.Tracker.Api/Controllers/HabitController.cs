@@ -30,10 +30,10 @@ namespace Habit.Tracker.Api.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserHabits(Guid id)
+        [HttpGet("{groupId}")]
+        public async Task<IActionResult> GetGroupHabits(Guid groupId)
         {
-            var response = await _habitService.GetUserHabitsAsync(id);
+            var response = await _habitService.GetHabitsByGroupIdAsync(groupId);
 
             return StatusCode(response.StatusCode, response);
         }

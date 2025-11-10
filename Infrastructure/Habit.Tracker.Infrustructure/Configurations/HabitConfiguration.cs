@@ -19,7 +19,7 @@ public class HabitConfig : IEntityTypeConfiguration<HabitEntity>
         builder.Property(h => h.StartDate)
                .IsRequired();
 
-        builder.Property(h => h.CompletedDaysCount)
+        builder.Property(h => h.Streak)
                .IsRequired()
                .HasDefaultValue(0);
 

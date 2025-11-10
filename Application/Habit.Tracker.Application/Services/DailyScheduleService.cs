@@ -62,6 +62,12 @@ public class DailyScheduleService : IDailyScheduleService
         if (habit.PeriodType != PeriodTypeEnum.Daily)
             return ResponseDto<NoContentDto>.Fail(_errorMessageService.WrongPeriodType, StatusCodes.Status400BadRequest);
 
+        if (request.ReminderTimes.Count != habit.Frequency)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.UnsuitableReaminderTimes, StatusCodes.Status400BadRequest);
+
+        if(habit.DailySchedules.Count > 0)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.SchedulerAlreadyExists, StatusCodes.Status400BadRequest);
+
         habit.DailySchedules.Clear();
 
         foreach (var time in request.ReminderTimes)

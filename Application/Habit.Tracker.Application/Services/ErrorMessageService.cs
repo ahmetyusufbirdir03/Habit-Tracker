@@ -30,6 +30,7 @@ namespace Habit.Tracker.Application.Services
         public string HabitGroupNotFound => _localizer["Habit group not found"];
         public string HabitGroupWithSameNameExists => _localizer["Another habit group with the same name already exists"];
         public string HabitGroupAlreadyExists => _localizer["Habit group already exists"];
+        public string MaxGroupCount => _localizer["Max group count"];
 
         //HABIT MESSAGES
         public string InvalidPeriodType => _localizer["Invalid period type"];
@@ -38,6 +39,8 @@ namespace Habit.Tracker.Application.Services
 
         //SCHEDULING MESSAGES 
         public string SchedulerNotFound => _localizer["Scheduler not found"];
+        public string SchedulerAlreadyExists => _localizer["Scheduler already exists"];
+        public string UnsuitableReaminderTimes => _localizer["Reminder time counts not equal to frequency"];
         public string WrongPeriodType => _localizer["Wrong Period Type"];
         public string ThisTimerAlreadyExist => _localizer["This timer already exists"];
         public string ScheduleDaysConflict => _localizer["The days are conflicts each other. Please choose unique days"];

@@ -2,7 +2,6 @@
 using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.Habit;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
-using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
 using Habit.Tracker.Contracts.Interfaces;
 using Habit.Tracker.Contracts.Interfaces.Repositories;
@@ -57,8 +56,6 @@ public class HabitService : IHabitService
 
 
         HabitEntity habit = _mapper.Map<HabitEntity>(request);
-        habit.StartDate = DateTime.UtcNow;
-        habit.CompletedDaysCount = 0;
         habit.IsActive = false;
         habit.CreatedDate = DateTime.UtcNow;
 
@@ -89,13 +86,19 @@ public class HabitService : IHabitService
         return ResponseDto<IList<HabitResponseDto>>.Success(_habits);
     }
 
-    public async Task<ResponseDto<IList<HabitDetailDto>>> GetUserHabitsAsync(Guid userId)
+    public async Task<ResponseDto<IList<HabitResponseDto>>> GetHabitsByGroupIdAsync(Guid groupId)
     {
-        var habits = await _habitRepository.GetUserHabitsAsync(userId);
+        var group = await _unitOfWork.GetGenericRepository<HabitGroup>().GetByIdAsync(groupId);
+        if (group == null)
+            return ResponseDto<IList<HabitResponseDto>>.Fail(_errorMessageService.HabitGroupNotFound, StatusCodes.Status404NotFound);
 
-        var habitDtos = _mapper.Map<List<HabitDetailDto>>(habits);
+        var habits = await _unitOfWork.GetGenericRepository<HabitEntity>().GetAllAsync(x => x.HabitGroupId == groupId);
+        if (habits.Count == 0)
+            return ResponseDto<IList<HabitResponseDto>>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
 
-        return ResponseDto<IList<HabitDetailDto>>.Success(habitDtos,StatusCodes.Status200OK);
+        var habitDtos = _mapper.Map<List<HabitResponseDto>>(habits);
+
+        return ResponseDto<IList<HabitResponseDto>>.Success(habitDtos,StatusCodes.Status200OK);
     }
 
     public async Task<ResponseDto<NoContentDto>> UpdateHabitAsync(UpdateHabitRequestDto request)
