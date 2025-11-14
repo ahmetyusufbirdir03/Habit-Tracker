@@ -8,4 +8,5 @@ public class HabitGroup : BaseEntity
     public User? User { get; set; }
 
     public List<HabitEntity>? Habits { get; set; }
+    public List<SpecialReminder>? SpecialReminders { get; set; }
 }

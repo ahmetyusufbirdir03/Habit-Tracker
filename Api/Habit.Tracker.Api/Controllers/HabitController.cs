@@ -1,5 +1,6 @@
 ﻿using Habit.Tracker.Contracts.Dtos.Habit.Create;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
+using Habit.Tracker.Contracts.Dtos.Habit.Update.Note;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,18 +47,18 @@ namespace Habit.Tracker.Api.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> ActivateHabit(Guid id)
+        [HttpPatch]
+        public async Task<IActionResult> UpdateHabit(UpdateHabitRequestDto request)
         {
-            var response = await _habitService.ActivateHabitAsync(id);
+            var response = await _habitService.UpdateHabitAsync(request);
 
             return StatusCode(response.StatusCode, response);
         }
 
         [HttpPatch]
-        public async Task<IActionResult> UpdateHabit(UpdateHabitRequestDto request)
+        public async Task<IActionResult> UpdateHabitNote(UpdateHabitNoteDto request)
         {
-            var response = await _habitService.UpdateHabitAsync(request);
+            var response = await _habitService.UpdateHabitNoteAsync(request);
 
             return StatusCode(response.StatusCode, response);
         }

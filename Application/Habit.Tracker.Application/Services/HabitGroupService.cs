@@ -92,8 +92,8 @@ public class HabitGroupService : IHabitGroupService
     public async Task<ResponseDto<IList<HabitGroupResponseDto>>> GetAllHabitGroupsByUserId(Guid Id)
     {
         //USER CHECK
-        var user = await _unitOfWork.GetGenericRepository<HabitGroup>().AnyAsync(h => h.UserId == Id);
-        if (!user)
+        var isUserExist = await _unitOfWork.GetGenericRepository<User>().AnyAsync(x => x.Id == Id);
+        if (!isUserExist)
             return ResponseDto<IList<HabitGroupResponseDto>>.Fail(_errorMessageService.UserNotFound, StatusCodes.Status404NotFound);
 
         //GROUPS CHECK

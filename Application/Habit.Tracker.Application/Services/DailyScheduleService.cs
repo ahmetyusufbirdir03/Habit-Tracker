@@ -124,6 +124,7 @@ public class DailyScheduleService : IDailyScheduleService
         }
 
         daily.ReminderTime = request.ReminderTime;
+        daily.CreatedDate = DateTime.UtcNow;
 
         await _unitOfWork.SaveChangesAsync();
 

@@ -76,10 +76,10 @@ public class UserService : IUserService
             return ResponseDto<UserResponseDto>.Fail(_errorMessageService.UserNotFound, StatusCodes.Status404NotFound);
 
             // 3) Tüm değerler boş mu kontrol et
-            bool hasAnyValue =
-                !string.IsNullOrWhiteSpace(request.Username) ||
-                !string.IsNullOrWhiteSpace(request.Email) ||
-                !string.IsNullOrWhiteSpace(request.PhoneNumber);
+        bool hasAnyValue =
+            !string.IsNullOrWhiteSpace(request.Username) ||
+            !string.IsNullOrWhiteSpace(request.Email) ||
+            !string.IsNullOrWhiteSpace(request.PhoneNumber);
 
         if (!hasAnyValue)
             return ResponseDto<UserResponseDto>.Fail(

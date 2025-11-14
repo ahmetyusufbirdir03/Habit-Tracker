@@ -4,9 +4,12 @@ using Habit.Tracker.Contracts.Dtos.DailySchedule;
 using Habit.Tracker.Contracts.Dtos.Habit;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
 using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
+using Habit.Tracker.Contracts.Dtos.Habit.Update;
 using Habit.Tracker.Contracts.Dtos.HabitGroup;
 using Habit.Tracker.Contracts.Dtos.HabitGroup.Create;
 using Habit.Tracker.Contracts.Dtos.MonthlyScheduler;
+using Habit.Tracker.Contracts.Dtos.SpecialReminder;
+using Habit.Tracker.Contracts.Dtos.SpecialReminder.Create;
 using Habit.Tracker.Contracts.Dtos.User;
 using Habit.Tracker.Contracts.Dtos.User.Register;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler;
@@ -31,10 +34,14 @@ namespace Habit.Tracker.Application
             CreateMap<HabitWeekly, HabitWeeklyDto>();
             CreateMap<HabitMonthly, HabitMonthlyDto>();
             CreateMap<HabitEntity, HabitResponseDto>();
+            CreateMap<HabitEntity, UpdateHabitResponseDto>();
             CreateMap<HabitDaily, DailyHabitResponseDto>();
             CreateMap<HabitWeekly, WeeklySchedulerResponseDto>();
             CreateMap<CreateDailyScheduleDto, HabitDaily>();
             CreateMap<HabitMonthly, MonthlySchedulerResponseDto>();
+            CreateMap<CreateSpecialReminderRequestDto,SpecialReminder>(); 
+            CreateMap<SpecialReminder, SpecialReminderResponseDto>();
+
         }
     }
 }

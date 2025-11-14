@@ -19,5 +19,10 @@ public class HabitGroupConfig : IEntityTypeConfiguration<HabitGroup>
                .WithOne(habit => habit.HabitGroup)
                .HasForeignKey(habit => habit.HabitGroupId)
                .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(h => h.SpecialReminders)
+               .WithOne(reminder => reminder.HabitGroup)
+               .HasForeignKey(reminder => reminder.HabitGroupId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

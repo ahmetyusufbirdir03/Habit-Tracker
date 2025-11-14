@@ -1,6 +1,6 @@
-﻿using Habit.Tracker.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Habit.Tracker.Domain.Entities;
 
 namespace Habit.Tracker.Infrastructure.Configurations;
 

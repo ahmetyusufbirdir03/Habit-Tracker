@@ -28,9 +28,7 @@ public class MonthlyScheduleDtoValidator : AbstractValidator<MonthlyScheduleDto>
         RuleFor(x => x.DayOfMonth)
             .Cascade(CascadeMode.Stop)
             .InclusiveBetween(1, 31)
-            .WithMessage("Ayın günü 1 ile 31 arasında olmalıdır.")
-            .Must(BeValidDayForCurrentMonth)
-            .WithMessage("Geçerli ay bu kadar gün içermiyor.");
+            .WithMessage("Ayın günü 1 ile 31 arasında olmalıdır.");
 
         RuleFor(x => x.ReminderTime)
             .NotEmpty()
