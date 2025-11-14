@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Habit.Tracker.Contracts.Dtos;
-using Habit.Tracker.Contracts.Dtos.Habit;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
 using Habit.Tracker.Contracts.Dtos.Habit.Update.Note;
@@ -78,16 +77,16 @@ public class HabitService : IHabitService
         return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 
-    public async Task<ResponseDto<IList<HabitResponseDto>>> GetAllHabits()
+    public async Task<ResponseDto<IList<HabitDetailDto>>> GetAllHabits()
     {
-        var habits = await _unitOfWork.GetGenericRepository<HabitEntity>().GetAllAsync();
+        var habits = await _habitRepository.GetHabitsWithSchedulersAsync();
 
         if(habits == null)
-            return ResponseDto<IList<HabitResponseDto>>.Fail(_errorMessageService.HabitNotFound,StatusCodes.Status404NotFound);
+            return ResponseDto<IList<HabitDetailDto>>.Fail(_errorMessageService.HabitNotFound,StatusCodes.Status404NotFound);
 
-        var _habits = _mapper.Map<IList<HabitResponseDto>>(habits);
+        var _habits = _mapper.Map<IList<HabitDetailDto>>(habits);
 
-        return ResponseDto<IList<HabitResponseDto>>.Success(_habits);
+        return ResponseDto<IList<HabitDetailDto>>.Success(_habits);
     }
 
     public async Task<ResponseDto<IList<HabitResponseDto>>> GetHabitsByGroupIdAsync(Guid groupId)
@@ -158,23 +157,5 @@ public class HabitService : IHabitService
         var _updatedHabit = _mapper.Map<HabitResponseDto>(habit);
 
         return ResponseDto<HabitResponseDto>.Success(_updatedHabit, StatusCodes.Status200OK);
-    }
-
-    public async Task<ResponseDto<NoContentDto>> UpdateHabitNoteAsync(UpdateHabitNoteDto request)
-    {
-        var validationError = await _validationService.ValidateAsync<UpdateHabitNoteDto, NoContentDto>(request);
-        if (validationError != null)
-            return validationError;
-
-        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(request.HabitId);
-        if(habit == null)
-            return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
-        
-        habit.Notes = request.Note;
-        habit.UpdatedDate = DateTime.UtcNow;
-        await _unitOfWork.SaveChangesAsync();
-        
-
-        return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 }

@@ -19,6 +19,5 @@ public class UpdateWeeklySchedulerDtoValidator : AbstractValidator<UpdateWeeklyS
             .WithMessage("Hatırlatma zamanı belirtilmelidir.")
             .Must(time => time >= TimeSpan.Zero && time < TimeSpan.FromDays(1))
             .WithMessage("Hatırlatma zamanı 00:00 ile 23:59 arasında olmalıdır.");
-
     }
 }
