@@ -89,10 +89,13 @@ public class MonthlySchedulerService : IMonthlySchedulerService
         //SCHEDULERS CREATION (MANUAL MAPPING)
         foreach (var schedule in request.Schedules)
         {
+            int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, DateTime.UtcNow.Month);
+            int day = Math.Min(schedule.DayOfMonth, daysInMonth);
+
             var monthlySchedule = new HabitMonthly
             {
                 HabitId = habit.Id,
-                DayOfMonth = schedule.DayOfMonth,
+                DayOfMonth = day,
                 ReminderTime = schedule.ReminderTime,
                 CreatedDate = DateTime.UtcNow
             };
@@ -138,7 +141,7 @@ public class MonthlySchedulerService : IMonthlySchedulerService
         if (monthlyScheduler.DayOfMonth == request.DayOfMonth && monthlyScheduler.ReminderTime == request.ReminderTime)
         {
             return ResponseDto<NoContentDto>.Fail(
-                $"Bu ayın {request.DayOfMonth}'ü için {request.ReminderTime} saatinde zaten bir hatırlatıcı mevcut. Lütfen farklı bir gün veya saat seçin.",
+                $"There is already a reminder set for day {request.DayOfMonth} of this month at {request.ReminderTime}. Please choose a different day or time.",
                 StatusCodes.Status409Conflict 
             );
         }
@@ -156,7 +159,7 @@ public class MonthlySchedulerService : IMonthlySchedulerService
         bool hasDuplicate = habit.MonthlySchedules
            .Any(x => x.Id != monthlyScheduler.Id && x.DayOfMonth == request.DayOfMonth);
         if (hasDuplicate)
-            return ResponseDto<NoContentDto>.Fail($"Bu haftanın {request.DayOfMonth}'ü için bir hatırlatıcı zaten var. Lütfen farklı bir gün seçiniz.", StatusCodes.Status409Conflict);
+            return ResponseDto<NoContentDto>.Fail($"A reminder already exists for day {request.DayOfMonth} of this month. Please choose a different day.", StatusCodes.Status409Conflict);
 
         //MANUAL MAPPING
         monthlyScheduler.DayOfMonth = request.DayOfMonth;

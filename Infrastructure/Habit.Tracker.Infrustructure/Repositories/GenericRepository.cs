@@ -2,7 +2,7 @@
 using Habit.Tracker.Infrustructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using SendGrid.Helpers.Mail;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace Habit.Tracker.Infrastructure.Repositories;
@@ -37,12 +37,21 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class, new()
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null)
+    public async Task<List<T>> GetAllAsync(
+    Expression<Func<T, bool>>? predicate = null,
+    Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null)
     {
-        if (predicate == null)
-            return await _dbSet.ToListAsync();  
-        return await _dbSet.Where(predicate).ToListAsync(); 
+        IQueryable<T> query = _dbSet;
+
+        if (predicate != null)
+            query = query.Where(predicate);
+
+        if (include != null)
+            query = include(query);
+
+        return await query.ToListAsync();
     }
+
 
     public async Task<T?> GetByIdAsync(Guid Id, params Expression<Func<T, object>>[] includes)
     {

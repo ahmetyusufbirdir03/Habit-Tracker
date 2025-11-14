@@ -143,7 +143,7 @@ public class WeeklySchedulerService : IWeeklySchedulerService
         bool hasDuplicate = habit.WeeklySchedules
             .Any(x => x.Id != weeklyScheduler.Id && x.DayOfWeek == request.DayOfWeek);
         if (hasDuplicate)
-            return ResponseDto<NoContentDto>.Fail($"Bu haftanın {request.DayOfWeek} günü için bir hatırlatıcı zaten var. Lütfen farklı bir gün seçiniz.", StatusCodes.Status409Conflict);
+            return ResponseDto<NoContentDto>.Fail($"A reminder already exists for day {request.DayOfWeek} of this week. Please choose a different day.", StatusCodes.Status409Conflict);
 
         weeklyScheduler.DayOfWeek = request.DayOfWeek;
         weeklyScheduler.UpdatedDate = DateTime.UtcNow;

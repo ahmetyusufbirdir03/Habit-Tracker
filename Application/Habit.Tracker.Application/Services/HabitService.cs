@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
 using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
-using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
+using Habit.Tracker.Contracts.Dtos.Habit.Update.Note;
+using Habit.Tracker.Contracts.Dtos.User;
+using Habit.Tracker.Contracts.Dtos.User.Update;
 using Habit.Tracker.Contracts.Interfaces;
 using Habit.Tracker.Contracts.Interfaces.Repositories;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Habit.Tracker.Domain.Entities;
 using Habit.Tracker.Domain.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Habit.Tracker.Application.Services;
 
@@ -56,8 +59,6 @@ public class HabitService : IHabitService
 
 
         HabitEntity habit = _mapper.Map<HabitEntity>(request);
-        habit.StartDate = DateTime.UtcNow;
-        habit.CompletedDaysCount = 0;
         habit.IsActive = false;
         habit.CreatedDate = DateTime.UtcNow;
 
@@ -88,39 +89,73 @@ public class HabitService : IHabitService
         return ResponseDto<IList<HabitDetailDto>>.Success(_habits);
     }
 
-    public async Task<ResponseDto<IList<HabitDetailDto>>> GetUserHabitsAsync(Guid userId)
+    public async Task<ResponseDto<IList<HabitResponseDto>>> GetHabitsByGroupIdAsync(Guid groupId)
     {
-        var habits = await _habitRepository.GetUserHabitsAsync(userId);
+        var group = await _unitOfWork.GetGenericRepository<HabitGroup>().GetByIdAsync(groupId);
+        if (group == null)
+            return ResponseDto<IList<HabitResponseDto>>.Fail(_errorMessageService.HabitGroupNotFound, StatusCodes.Status404NotFound);
 
-        var habitDtos = _mapper.Map<List<HabitDetailDto>>(habits);
+        var habits = await _unitOfWork.GetGenericRepository<HabitEntity>().GetAllAsync(x => x.HabitGroupId == groupId);
+        if (habits.Count == 0)
+            return ResponseDto<IList<HabitResponseDto>>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
 
-        return ResponseDto<IList<HabitDetailDto>>.Success(habitDtos,StatusCodes.Status200OK);
+        var habitDtos = _mapper.Map<List<HabitResponseDto>>(habits);
+
+        return ResponseDto<IList<HabitResponseDto>>.Success(habitDtos,StatusCodes.Status200OK);
     }
 
-    public async Task<ResponseDto<NoContentDto>> UpdateHabitAsync(UpdateHabitRequestDto request)
+    public async Task<ResponseDto<HabitResponseDto>> UpdateHabitAsync(UpdateHabitRequestDto request)
     {
-        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(request.Id);
-        if (habit == null)
-            return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
+        var validationError = await _validationService.ValidateAsync<UpdateHabitRequestDto, HabitResponseDto>(request);
+        if (validationError != null)
+            return validationError;
 
-        if (habit.PeriodType != request.PeriodType || habit.Frequency != request.Frequency)
+        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(request.Id,
+            h => h.DailySchedules,
+            h => h.WeeklySchedules,
+            h => h.MonthlySchedules);
+        if (habit == null)
+            return ResponseDto<HabitResponseDto>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
+
+        bool isEmpty = request.Notes == null && request.Frequency == null && request.PeriodType == null && request.Name == null;
+        if (isEmpty)
+            return ResponseDto<HabitResponseDto>.Fail("Güncellenecek bir değer bulunamadı", StatusCodes.Status400BadRequest);
+
+        bool isAllConflict = habit.PeriodType == request.PeriodType &&
+            habit.Frequency == request.Frequency &&
+            habit.Name == request.Name &&
+            habit.Notes == request.Notes;
+        if (isAllConflict)
+            return ResponseDto<HabitResponseDto>.Fail("Yeni değerler öncekilerle aynı olamaz", StatusCodes.Status400BadRequest);
+
+        bool isPeriodOrFrequencyChanged = 
+            (request.Frequency.HasValue || request.PeriodType.HasValue ) &&
+            (request.PeriodType != habit.PeriodType || request.Frequency != habit.Frequency);
+        if (isPeriodOrFrequencyChanged)
         {
             habit.DailySchedules.Clear();
             habit.WeeklySchedules.Clear();
             habit.MonthlySchedules.Clear();
+            habit.IsActive = false;
+            if (request.PeriodType.HasValue)
+                habit.PeriodType = request.PeriodType.Value;
 
-            habit.PeriodType = request.PeriodType;
-            habit.Frequency = request.Frequency;
-
-            habit.IsActive = false; 
+            if (request.Frequency.HasValue)
+                habit.Frequency = request.Frequency.Value;
         }
 
-        habit.Name = request.Name;
+        if(!string.IsNullOrWhiteSpace(request.Name))
+            habit.Name = request.Name;
+
+
         habit.Notes = request.Notes;
+
         habit.UpdatedDate = DateTime.UtcNow;
 
         await _unitOfWork.GetGenericRepository<HabitEntity>().UpdateAsync(habit);
 
-        return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
+        var _updatedHabit = _mapper.Map<HabitResponseDto>(habit);
+
+        return ResponseDto<HabitResponseDto>.Success(_updatedHabit, StatusCodes.Status200OK);
     }
 }

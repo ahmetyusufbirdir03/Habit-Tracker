@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using Habit.Tracker.Contracts.Dtos;
+using Habit.Tracker.Contracts.Dtos.DailyHabit.Create;
 using Habit.Tracker.Contracts.Dtos.HabitGroup;
 using Habit.Tracker.Contracts.Dtos.HabitGroup.Create;
 using Habit.Tracker.Contracts.Dtos.HabitGroup.Update;
-using Habit.Tracker.Contracts.Dtos.User;
-using Habit.Tracker.Contracts.Dtos.User.Login;
 using Habit.Tracker.Contracts.Interfaces;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Habit.Tracker.Domain.Entities;
@@ -32,21 +31,26 @@ public class HabitGroupService : IHabitGroupService
     }
     public async Task<ResponseDto<NoContentDto>> CreateHabitGroup(HabitGroupCreateRequestDto request)
     {
-        //REQUEST NULL CHECK
-        if (request == null)
-            return ResponseDto<NoContentDto>.Fail("NoRequest",StatusCodes.Status400BadRequest);
+        var validationError = await _validationService.ValidateAsync<HabitGroupCreateRequestDto, NoContentDto>(request);
+        if (validationError != null)
+            return validationError;
 
         // USER ID CHECK
         User? user = await _unitOfWork.GetGenericRepository<User>().GetByIdAsync(request.UserId);
 
         if (user is null)
-            return ResponseDto<NoContentDto>.Fail(_errorMessageService.UserNotFound, StatusCodes.Status400BadRequest);
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.UserNotFound, StatusCodes.Status404NotFound);
 
         // GROUP NAME CHECK
-        bool isNameExist = await _unitOfWork.GetGenericRepository<HabitGroup>().AnyAsync(x => x.Name == request.Name && user.Id == request.UserId);
+        bool isNameExist = await _unitOfWork.GetGenericRepository<HabitGroup>().AnyAsync(x => x.Name == request.Name && x.User.Id == request.UserId);
         
         if(isNameExist)
             return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitGroupNameAlreadyExists, StatusCodes.Status400BadRequest);
+
+        var groups = await _unitOfWork.GetGenericRepository<HabitGroup>().GetAllAsync(x => x.User!.Id == request.UserId);
+            
+        if(groups.Count >= 10)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.MaxGroupCount, StatusCodes.Status400BadRequest);
 
 
         // CREATE GROUP
@@ -55,6 +59,7 @@ public class HabitGroupService : IHabitGroupService
         habitGroup.Id = Guid.NewGuid();
         habitGroup.CreatedDate = DateTime.UtcNow;
         habitGroup.Habits = new List<HabitEntity>();
+        habitGroup.CreatedBy = user.Id.ToString();
 
         await _unitOfWork.GetGenericRepository<HabitGroup>().CreateAsync(habitGroup);
 
@@ -87,8 +92,8 @@ public class HabitGroupService : IHabitGroupService
     public async Task<ResponseDto<IList<HabitGroupResponseDto>>> GetAllHabitGroupsByUserId(Guid Id)
     {
         //USER CHECK
-        var user = await _unitOfWork.GetGenericRepository<HabitGroup>().AnyAsync(h => h.UserId == Id);
-        if (!user)
+        var isUserExist = await _unitOfWork.GetGenericRepository<User>().AnyAsync(x => x.Id == Id);
+        if (!isUserExist)
             return ResponseDto<IList<HabitGroupResponseDto>>.Fail(_errorMessageService.UserNotFound, StatusCodes.Status404NotFound);
 
         //GROUPS CHECK
@@ -116,7 +121,11 @@ public class HabitGroupService : IHabitGroupService
         if (habitGroup.Name == request.Name)
             return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitGroupWithSameNameExists, StatusCodes.Status400BadRequest);
 
-        habitGroup.Name = request.Name;
+        bool isNameExist = await _unitOfWork.GetGenericRepository<HabitGroup>().AnyAsync(x => x.Name == request.Name);
+        if(isNameExist)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitGroupWithSameNameExists, StatusCodes.Status400BadRequest);
+
+            habitGroup.Name = request.Name;
         habitGroup.UpdatedDate = DateTime.UtcNow;
         _= await _unitOfWork.GetGenericRepository<HabitGroup>().UpdateAsync(habitGroup);
 

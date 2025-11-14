@@ -1,6 +1,6 @@
-﻿using Habit.Tracker.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Habit.Tracker.Domain.Entities;
 
 namespace Habit.Tracker.Infrastructure.Configurations;
 
@@ -17,6 +17,9 @@ public class HabitDailyConfig : IEntityTypeConfiguration<HabitDaily>
 
         builder.Property(hd => hd.HabitId)
                .IsRequired();
+
+        builder.Property(hd => hd.isDoneToday)
+            .IsRequired();
 
 
         builder.Property(hd => hd.ReminderTime)

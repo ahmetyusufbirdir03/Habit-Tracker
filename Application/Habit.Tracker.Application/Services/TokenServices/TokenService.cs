@@ -39,11 +39,13 @@ public class TokenService : ITokenService
         }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSettings.Secret));
-
+        System.Diagnostics.Debug.WriteLine("------------------------------------------------------------------------------");
+        System.Diagnostics.Debug.WriteLine($"Token Validity: {tokenSettings.TokenValidityInMinutes} minutes");
+        System.Diagnostics.Debug.WriteLine("------------------------------------------------------------------------------");
         var token = new JwtSecurityToken(
             issuer: tokenSettings.Issuer,
             audience: tokenSettings.Audience,
-            expires: DateTime.Now.AddMinutes(tokenSettings.TokenValidityInMinutes),
+            expires: DateTime.UtcNow.AddMinutes(tokenSettings.TokenValidityInMinutes),
             claims: claims,
             signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );

@@ -7,7 +7,7 @@ public class HabitEntity : BaseEntity
     
     public string? Name { get; set; }
     public DateTime StartDate { get; set; }
-    public int CompletedDaysCount { get; set; } = 0;
+    public int Streak { get; set; } = 0;
     
     public PeriodTypeEnum PeriodType { get; set; }
     public int Frequency {  get; set; }

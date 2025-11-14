@@ -1,8 +1,8 @@
 ﻿using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.Habit;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
-using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
+using Habit.Tracker.Contracts.Dtos.Habit.Update.Note;
 
 namespace Habit.Tracker.Contracts.Interfaces.Services;
 

@@ -15,6 +15,8 @@ namespace Habit.Tracker.Application.Services
         public string TokenNotFound => _localizer["Authentication token not found"];
         public string InvalidOrExpiredToken => _localizer["Invalid or expired authentication token"];
 
+        public string SessionExpired => _localizer["This token is expired"];
+
         // USER MESSAGES
         public string UserNotFound => _localizer["User not found"];
         public string EmailAlreadyRegistered => _localizer["Email address is already registered"];
@@ -28,6 +30,7 @@ namespace Habit.Tracker.Application.Services
         public string HabitGroupNotFound => _localizer["Habit group not found"];
         public string HabitGroupWithSameNameExists => _localizer["Another habit group with the same name already exists"];
         public string HabitGroupAlreadyExists => _localizer["Habit group already exists"];
+        public string MaxGroupCount => _localizer["Max group count - 10"];
 
         //HABIT MESSAGES
         public string InvalidPeriodType => _localizer["Invalid period type"];
@@ -36,10 +39,17 @@ namespace Habit.Tracker.Application.Services
 
         //SCHEDULING MESSAGES 
         public string SchedulerNotFound => _localizer["Scheduler not found"];
+        public string SchedulerAlreadyExists => _localizer["Scheduler already exists"];
+        public string UnsuitableReaminderTimes => _localizer["Reminder time counts not equal to frequency"];
         public string WrongPeriodType => _localizer["Wrong Period Type"];
         public string ThisTimerAlreadyExist => _localizer["This timer already exists"];
         public string ScheduleDaysConflict => _localizer["The days are conflicts each other. Please choose unique days"];
         public string HasAlreadySchedulers => _localizer["This habit already has schedulers"];
+
+        //SPECIAL REMINDERS
+        public string MaxReminderCount => _localizer["Max reminder count - 10"];
+        public string ReminderAlreadyExistsWithSameNameAndDate => _localizer["A reminder with same name and date already exists"];
+        public string ReminderNotFound => _localizer["Reminder not found"];
 
     }
 }

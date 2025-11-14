@@ -4,6 +4,7 @@ using Habit.Tracker.Infrustructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Habit.Tracker.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251107133139_EntitiyUpdate")]
+    partial class EntitiyUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,9 +196,6 @@ namespace Habit.Tracker.Infrastructure.Migrations
                     b.Property<Guid>("HabitId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDoneToday")
-                        .HasColumnType("bit");
-
                     b.Property<TimeSpan>("ReminderTime")
                         .HasColumnType("time");
 
@@ -236,9 +236,6 @@ namespace Habit.Tracker.Infrastructure.Migrations
 
                     b.Property<Guid>("HabitId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDoneToday")
-                        .HasColumnType("bit");
 
                     b.Property<TimeSpan>("ReminderTime")
                         .HasColumnType("time");
@@ -285,43 +282,6 @@ namespace Habit.Tracker.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Habit.Tracker.Domain.Entities.SpecialReminder", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Day")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<Guid>("HabitGroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
-
-                    b.Property<int>("Month")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HabitGroupId");
-
-                    b.HasIndex("Month", "Day");
-
-                    b.ToTable("SpecialReminders", (string)null);
                 });
 
             modelBuilder.Entity("Habit.Tracker.Domain.Entities.User", b =>
@@ -554,17 +514,6 @@ namespace Habit.Tracker.Infrastructure.Migrations
                     b.Navigation("Habit");
                 });
 
-            modelBuilder.Entity("Habit.Tracker.Domain.Entities.SpecialReminder", b =>
-                {
-                    b.HasOne("Habit.Tracker.Domain.Entities.HabitGroup", "HabitGroup")
-                        .WithMany("SpecialReminders")
-                        .HasForeignKey("HabitGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("HabitGroup");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Habit.Tracker.Domain.Entities.Role", null)
@@ -628,8 +577,6 @@ namespace Habit.Tracker.Infrastructure.Migrations
             modelBuilder.Entity("Habit.Tracker.Domain.Entities.HabitGroup", b =>
                 {
                     b.Navigation("Habits");
-
-                    b.Navigation("SpecialReminders");
                 });
 #pragma warning restore 612, 618
         }

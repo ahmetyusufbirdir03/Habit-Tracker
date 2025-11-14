@@ -10,7 +10,7 @@ public class CreateDailySchedulerRequestValidator : AbstractValidator<CreateDail
         RuleFor(x => x.ReminderTimes)
             .NotEmpty().WithMessage("Determine your schedules")
             .Must(times => times.Distinct().Count() == times.Count)
-            .WithMessage("Zamanlar birbirindenfarklı olmalı");
+            .WithMessage("Times must be diffrent from each other.");
 
         RuleFor(x => x.HabitId).NotNull().WithMessage("Need Habit Id");
             
