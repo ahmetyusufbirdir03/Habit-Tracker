@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Habit.Tracker.Contracts.Dtos;
-using Habit.Tracker.Contracts.Dtos.Habit;
-using Habit.Tracker.Contracts.Dtos.MonthlyScheduler;
 using Habit.Tracker.Contracts.Dtos.SpecialReminder;
 using Habit.Tracker.Contracts.Dtos.SpecialReminder.Create;
 using Habit.Tracker.Contracts.Dtos.SpecialReminder.Update;
@@ -9,8 +7,6 @@ using Habit.Tracker.Contracts.Interfaces;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Habit.Tracker.Domain.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
-using System.Text.RegularExpressions;
 
 namespace Habit.Tracker.Application.Services;
 
