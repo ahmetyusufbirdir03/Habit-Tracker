@@ -9,6 +9,7 @@ using Habit.Tracker.Contracts.Dtos.HabitGroup.Create;
 using Habit.Tracker.Contracts.Dtos.MonthlyScheduler;
 using Habit.Tracker.Contracts.Dtos.SpecialReminder;
 using Habit.Tracker.Contracts.Dtos.SpecialReminder.Create;
+using Habit.Tracker.Contracts.Dtos.SpecialReminder.Update;
 using Habit.Tracker.Contracts.Dtos.User;
 using Habit.Tracker.Contracts.Dtos.User.Register;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler;
