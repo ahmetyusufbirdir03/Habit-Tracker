@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Habit.Tracker.Contracts.Dtos;
+using Habit.Tracker.Contracts.Dtos.Habit;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
 using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
@@ -21,7 +22,7 @@ public class HabitService : IHabitService
     private readonly IMapper _mapper;
     private readonly IHabitRepository _habitRepository;
 
-    public HabitService(IValidationService validationService, 
+    public HabitService(IValidationService validationService,
         ErrorMessageService errorMessageService,
         IUnitOfWork unitOfWork,
         IMapper mapper,
@@ -79,8 +80,8 @@ public class HabitService : IHabitService
     {
         var habits = await _habitRepository.GetHabitsWithSchedulersAsync();
 
-        if(habits == null)
-            return ResponseDto<IList<HabitDetailDto>>.Fail(_errorMessageService.HabitNotFound,StatusCodes.Status404NotFound);
+        if (habits == null)
+            return ResponseDto<IList<HabitDetailDto>>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
 
         var _habits = _mapper.Map<IList<HabitDetailDto>>(habits);
 
@@ -99,7 +100,7 @@ public class HabitService : IHabitService
 
         var habitDtos = _mapper.Map<List<HabitResponseDto>>(habits);
 
-        return ResponseDto<IList<HabitResponseDto>>.Success(habitDtos,StatusCodes.Status200OK);
+        return ResponseDto<IList<HabitResponseDto>>.Success(habitDtos, StatusCodes.Status200OK);
     }
 
     public async Task<ResponseDto<HabitResponseDto>> UpdateHabitAsync(UpdateHabitRequestDto request)
@@ -126,8 +127,8 @@ public class HabitService : IHabitService
         if (isAllConflict)
             return ResponseDto<HabitResponseDto>.Fail("Yeni değerler öncekilerle aynı olamaz", StatusCodes.Status400BadRequest);
 
-        bool isPeriodOrFrequencyChanged = 
-            (request.Frequency.HasValue || request.PeriodType.HasValue ) &&
+        bool isPeriodOrFrequencyChanged =
+            (request.Frequency.HasValue || request.PeriodType.HasValue) &&
             (request.PeriodType != habit.PeriodType || request.Frequency != habit.Frequency);
         if (isPeriodOrFrequencyChanged)
         {
@@ -142,7 +143,7 @@ public class HabitService : IHabitService
                 habit.Frequency = request.Frequency.Value;
         }
 
-        if(!string.IsNullOrWhiteSpace(request.Name))
+        if (!string.IsNullOrWhiteSpace(request.Name))
             habit.Name = request.Name;
 
 
@@ -155,5 +156,22 @@ public class HabitService : IHabitService
         var _updatedHabit = _mapper.Map<HabitResponseDto>(habit);
 
         return ResponseDto<HabitResponseDto>.Success(_updatedHabit, StatusCodes.Status200OK);
+    }
+
+    public async Task<ResponseDto<NoContentDto>> UpdateHabitNoteAsync(UpdateHabitNoteDto request)
+    {
+        var validationError = await _validationService.ValidateAsync<UpdateHabitNoteDto, NoContentDto>(request);
+        if (validationError != null)
+            return validationError;
+
+        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(request.HabitId);
+        if (habit == null)
+            return ResponseDto<NoContentDto>
+                .Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
+
+        habit.Notes = request.Note;
+        await _unitOfWork.SaveChangesAsync();
+
+        return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 }
