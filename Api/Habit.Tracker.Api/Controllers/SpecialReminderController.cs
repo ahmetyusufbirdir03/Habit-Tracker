@@ -1,6 +1,7 @@
 ﻿using Habit.Tracker.Application.Services;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
 using Habit.Tracker.Contracts.Dtos.SpecialReminder.Create;
+using Habit.Tracker.Contracts.Dtos.SpecialReminder.Update;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,6 +36,14 @@ public class SpecialReminderController : BaseController
     public async Task<IActionResult> GetGroupSpecialReminders(Guid groupId)
     {
         var response = await _specialReminderService.GetSpecialReminderAsync(groupId);
+
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> UpdateSpecialReminder(UpdateSpecialReminderRequestDto request)
+    {
+        var response = await _specialReminderService.UpdateSpecialReminderAsync(request);
 
         return StatusCode(response.StatusCode, response);
     }
