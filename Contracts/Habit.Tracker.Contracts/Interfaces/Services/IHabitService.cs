@@ -11,8 +11,7 @@ public interface IHabitService
 {
     public Task<ResponseDto<NoContentDto>> CreateHabit(CreateHabitRequestDto request);
     public Task<ResponseDto<NoContentDto>> DeleteHabit(Guid id);
-    public Task<ResponseDto<HabitResponseDto>> UpdateHabitAsync(UpdateHabitRequestDto request);
-    public Task<ResponseDto<NoContentDto>> UpdateHabitNoteAsync(UpdateHabitNoteDto request);
-    public Task<ResponseDto<IList<HabitResponseDto>>> GetHabitsByGroupIdAsync(Guid groupId);
-    public Task<ResponseDto<IList<HabitResponseDto>>> GetAllHabits();
+    public Task<ResponseDto<NoContentDto>> UpdateHabitAsync(UpdateHabitRequestDto request);
+    public Task<ResponseDto<IList<HabitDetailDto>>> GetUserHabitsAsync(Guid userId);
+    public Task<ResponseDto<IList<HabitDetailDto>>> GetAllHabits();
 }

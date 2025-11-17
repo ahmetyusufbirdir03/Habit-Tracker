@@ -5,5 +5,6 @@ namespace Habit.Tracker.Contracts.Interfaces.Repositories;
 public interface IHabitRepository
 {
     Task<List<HabitEntity>> GetUserHabitsAsync(Guid userId);
+    Task<List<HabitEntity>> GetHabitsWithSchedulersAsync();
 }
 

@@ -14,6 +14,18 @@ namespace Habit.Tracker.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<List<HabitEntity>> GetHabitsWithSchedulersAsync()
+        {
+            var habits = await _dbContext.Habits
+            .Include(h => h.HabitGroup)
+            .Include(h => h.DailySchedules)
+            .Include(h => h.WeeklySchedules)
+            .Include(h => h.MonthlySchedules)
+            .ToListAsync();
+
+            return habits;
+        }
+
         public async Task<List<HabitEntity>> GetUserHabitsAsync(Guid userId)
         {
             var habits = await _dbContext.Habits

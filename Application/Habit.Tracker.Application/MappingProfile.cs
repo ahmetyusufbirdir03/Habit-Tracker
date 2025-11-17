@@ -26,13 +26,6 @@ namespace Habit.Tracker.Application
             CreateMap<HabitGroupCreateRequestDto, HabitGroup>();
             CreateMap<HabitGroup, HabitGroupResponseDto>();
             CreateMap<CreateHabitRequestDto, HabitEntity>();
-            CreateMap<HabitEntity, HabitDetailDto>()
-                .ForMember(dest => dest.DailySchedules, opt => opt.MapFrom(src => src.DailySchedules != null ? src.DailySchedules.ToList() : new List<HabitDaily>()))
-                .ForMember(dest => dest.WeeklySchedules, opt => opt.MapFrom(src => src.WeeklySchedules != null ? src.WeeklySchedules.ToList() : new List<HabitWeekly>()))
-                .ForMember(dest => dest.MonthlySchedules, opt => opt.MapFrom(src => src.MonthlySchedules != null ? src.MonthlySchedules.ToList() : new List<HabitMonthly>()));
-            CreateMap<HabitDaily, HabitDailyDto>();
-            CreateMap<HabitWeekly, HabitWeeklyDto>();
-            CreateMap<HabitMonthly, HabitMonthlyDto>();
             CreateMap<HabitEntity, HabitResponseDto>();
             CreateMap<HabitEntity, UpdateHabitResponseDto>();
             CreateMap<HabitDaily, DailyHabitResponseDto>();
