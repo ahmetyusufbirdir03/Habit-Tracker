@@ -17,6 +17,7 @@ public static class Registration
         services.AddLocalization(options => options.ResourcesPath = "Resources");
         services.AddScoped<IValidationService, ValidationService>();
         services.AddScoped(typeof(IUserService), typeof(UserService));
+        services.AddScoped(typeof(IAuthService), typeof(AuthService));
         services.AddScoped(typeof(IHabitGroupService), typeof(HabitGroupService));
         services.AddScoped(typeof(IHabitService), typeof(HabitService));
         services.AddScoped(typeof(IDailyScheduleService), typeof(DailyScheduleService));
