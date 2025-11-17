@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
+using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
 using Habit.Tracker.Contracts.Dtos.Habit.Update.Note;
-using Habit.Tracker.Contracts.Dtos.User;
-using Habit.Tracker.Contracts.Dtos.User.Update;
 using Habit.Tracker.Contracts.Interfaces;
 using Habit.Tracker.Contracts.Interfaces.Repositories;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Habit.Tracker.Domain.Entities;
 using Habit.Tracker.Domain.Enums;
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Habit.Tracker.Application.Services;
 
