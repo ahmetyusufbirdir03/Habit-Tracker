@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Habit.Tracker.Contracts.Dtos;
+using Habit.Tracker.Contracts.Dtos.Habit;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
 using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
@@ -155,5 +156,22 @@ public class HabitService : IHabitService
         var _updatedHabit = _mapper.Map<HabitResponseDto>(habit);
 
         return ResponseDto<HabitResponseDto>.Success(_updatedHabit, StatusCodes.Status200OK);
+    }
+
+    public async Task<ResponseDto<NoContentDto>> UpdateHabitNoteAsync(UpdateHabitNoteDto request)
+    {
+        var validationError = await _validationService.ValidateAsync<UpdateHabitNoteDto, NoContentDto>(request);
+        if (validationError != null)
+            return validationError;
+
+        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(request.HabitId);
+        if (habit == null)
+            return ResponseDto<NoContentDto>
+                .Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
+
+        habit.Notes = request.Note;
+        await _unitOfWork.SaveChangesAsync();
+
+        return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 }
