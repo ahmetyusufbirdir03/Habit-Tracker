@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FirebaseAdmin" Version="3.4.0" />
+    <PackageReference Include="Hangfire" Version="1.8.22" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Contracts\Habit.Tracker.Contracts\Habit.Tracker.Contracts.csproj" />
+    <ProjectReference Include="..\..\Domain\Habit.Tracker.Domain\Habit.Tracker.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Habit.Tracker.Infrustructure\Habit.Tracker.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Habit.Tracker.Application.Services.UtilServices;
 using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.Auth;
 using Habit.Tracker.Contracts.Dtos.User.Login;

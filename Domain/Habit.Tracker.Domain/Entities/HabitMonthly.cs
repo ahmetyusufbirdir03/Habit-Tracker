@@ -6,4 +6,6 @@ public class HabitMonthly : BaseEntity
     public TimeSpan ReminderTime { get; set; }
     public bool IsDoneToday { get; set; }
     public HabitEntity? Habit { get; set; }
+
+    public DateTime? LastNotificationDate { get; set; }
 }

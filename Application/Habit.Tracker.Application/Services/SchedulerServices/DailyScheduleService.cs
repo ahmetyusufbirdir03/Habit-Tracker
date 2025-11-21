@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Habit.Tracker.Application.Services.UtilServices;
 using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.DailyHabit.Create;
 using Habit.Tracker.Contracts.Dtos.DailySchedule;
@@ -10,7 +11,7 @@ using Habit.Tracker.Domain.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Habit.Tracker.Application.Services;
+namespace Habit.Tracker.Application.Services.SchedulerServices;
 
 public class DailyScheduleService : IDailyScheduleService
 {

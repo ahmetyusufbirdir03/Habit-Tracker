@@ -1,5 +1,8 @@
 ﻿using Habit.Tracker.Application.Services;
+using Habit.Tracker.Application.Services.SchedulerServices;
 using Habit.Tracker.Application.Services.TokenServices;
+using Habit.Tracker.Application.Services.UserServices;
+using Habit.Tracker.Application.Services.UtilServices;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +27,7 @@ public static class Registration
         services.AddScoped(typeof(IWeeklySchedulerService), typeof(WeeklySchedulerService));
         services.AddScoped(typeof(IMonthlySchedulerService), typeof(MonthlySchedulerService));
         services.AddScoped(typeof(ISpecialReminderService), typeof(SpecialReminderService));
+        services.AddScoped(typeof(IUserDeviceService), typeof(UserDeviceService));
 
         services.AddScoped<ErrorMessageService>();
 

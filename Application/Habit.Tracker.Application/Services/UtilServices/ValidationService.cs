@@ -4,7 +4,7 @@ using Habit.Tracker.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Habit.Tracker.Application.Services
+namespace Habit.Tracker.Application.Services.UtilServices
 {
     public class ValidationService : IValidationService
     {

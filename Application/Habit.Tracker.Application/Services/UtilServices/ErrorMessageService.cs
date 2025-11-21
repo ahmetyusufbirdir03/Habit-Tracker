@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Localization;
 
-namespace Habit.Tracker.Application.Services
+namespace Habit.Tracker.Application.Services.UtilServices
 {
     public class ErrorMessageService
     {
@@ -24,6 +24,9 @@ namespace Habit.Tracker.Application.Services
         public string UsernameAlreadyTaken => _localizer["Username is already taken"];
         public string EmailNotFound => _localizer["Email address not found"];
         public string InvalidAuthenticationCredentials => _localizer["Invalid authentication credentials"];
+
+        // USER DEVICES
+        public string DeviceNotFound => _localizer["Device not found"];
 
         // HABIT GROUP MESSAGES
         public string HabitGroupNameAlreadyExists => _localizer["Habit group name already exists"];

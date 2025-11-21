@@ -16,6 +16,10 @@
 # Mono auto generated files
 mono_crash.*
 
+
+# Firebase config file
+firebase-config.json
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

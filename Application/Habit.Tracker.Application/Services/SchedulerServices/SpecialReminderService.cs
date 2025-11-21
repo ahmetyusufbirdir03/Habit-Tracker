@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Habit.Tracker.Application.Services.UtilServices;
 using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.SpecialReminder;
 using Habit.Tracker.Contracts.Dtos.SpecialReminder.Create;
@@ -8,7 +9,7 @@ using Habit.Tracker.Contracts.Interfaces.Services;
 using Habit.Tracker.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 
-namespace Habit.Tracker.Application.Services;
+namespace Habit.Tracker.Application.Services.SchedulerServices;
 
 public class SpecialReminderService : ISpecialReminderService
 {
@@ -125,10 +126,10 @@ public class SpecialReminderService : ISpecialReminderService
         }
 
         bool changed =
-            (!string.IsNullOrWhiteSpace(request.Title) &&
-             request.Title.Trim() != specialReminder.Title) ||
-            (!string.IsNullOrWhiteSpace(request.Description) &&
-             request.Description.Trim() != specialReminder.Description) ||
+            !string.IsNullOrWhiteSpace(request.Title) &&
+             request.Title.Trim() != specialReminder.Title ||
+            !string.IsNullOrWhiteSpace(request.Description) &&
+             request.Description.Trim() != specialReminder.Description ||
             request.Day != specialReminder.Day ||
             request.Month != specialReminder.Month;
 

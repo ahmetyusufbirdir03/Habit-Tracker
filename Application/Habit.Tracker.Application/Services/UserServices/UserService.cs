@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Habit.Tracker.Application.Services.UtilServices;
 using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.User;
 using Habit.Tracker.Contracts.Dtos.User.Update;
@@ -8,7 +9,7 @@ using Habit.Tracker.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
-namespace Habit.Tracker.Application.Services;
+namespace Habit.Tracker.Application.Services.UserServices;
 
 public class UserService : IUserService
 {

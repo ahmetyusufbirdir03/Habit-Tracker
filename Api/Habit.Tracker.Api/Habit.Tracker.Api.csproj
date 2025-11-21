@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\Habit.Tracker.Application\Habit.Tracker.Application.csproj" />
+    <ProjectReference Include="..\..\Background.Jobs\Habit.Tracker.Reminder.Service\Habit.Tracker.Reminder.Service.csproj" />
     <ProjectReference Include="..\..\Contracts\Habit.Tracker.Contracts\Habit.Tracker.Contracts.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Habit.Tracker.Infrustructure\Habit.Tracker.Infrastructure.csproj" />
   </ItemGroup>

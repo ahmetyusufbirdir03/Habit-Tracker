@@ -4,6 +4,7 @@ using Habit.Tracker.Api.Middleware.ExceptionMiddleware;
 using Habit.Tracker.Application;
 using Habit.Tracker.Contracts;
 using Habit.Tracker.Infrastructure;
+using Habit.Tracker.Reminder.Service;
 using Microsoft.OpenApi.Models;
 
 
@@ -41,6 +42,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddBackgroundJobs(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddContracts(builder.Configuration);
