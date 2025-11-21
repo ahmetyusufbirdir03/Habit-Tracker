@@ -34,6 +34,7 @@ public class DailyHandler : IDailyHandler
             .Include(x => x.Habit)
                 .ThenInclude(h => h.HabitGroup)
             .Where(hd =>
+                !hd.isDoneToday &&
                 hd.Habit!.IsActive && 
                 hd.ReminderTime >= startTimeWindow &&
                 hd.ReminderTime <= currentTime &&
@@ -42,7 +43,6 @@ public class DailyHandler : IDailyHandler
             .ToListAsync();
         if (pendingSchedulers.Any())
         {
-
             _logger.LogInformation($"{pendingSchedulers.Count} adet gönderilecek bildirim bulundu.");
 
             foreach (var scheduler in pendingSchedulers)

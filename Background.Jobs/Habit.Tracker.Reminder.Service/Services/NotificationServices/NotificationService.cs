@@ -31,12 +31,12 @@ public class NotificationService : INotificationService
         string message)
     {
 
-        var userTokens = await _dbContext.UserDevices
+        var userDeviceTokens = await _dbContext.UserDevices
             .Where(x => x.UserId == idList.UserId && !string.IsNullOrEmpty(x.FcmToken))
             .Select(x => x.FcmToken)
             .ToListAsync();
 
-        if (!userTokens.Any())
+        if (!userDeviceTokens.Any())
         {
             _logger.LogWarning($"User {idList.UserId} has no registered FCM tokens. Notification skipped.");
             return false;
@@ -56,7 +56,7 @@ public class NotificationService : INotificationService
 
         bool isSuccess = false;
 
-        foreach (var token in userTokens)
+        foreach (var token in userDeviceTokens)
         {
             var fcmMessage = new Message()
             {

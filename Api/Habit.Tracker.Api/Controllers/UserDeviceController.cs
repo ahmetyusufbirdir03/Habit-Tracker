@@ -20,4 +20,12 @@ public class UserDeviceController : BaseController
 
         return StatusCode(response.StatusCode, response);
     }
+
+    [HttpDelete("{deviceToken}")]
+    public async Task<IActionResult> DeleteDeviceUser(string deviceToken)
+    {
+        var response = await _userDeviceService.DeleteDeviceUserAsync(deviceToken);
+
+        return StatusCode(response.StatusCode, response);
+    }
 }
