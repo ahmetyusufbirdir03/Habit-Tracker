@@ -26,6 +26,25 @@ public class UserDeviceService : IUserDeviceService
         _validationService = validationService;
     }
 
+    public async Task<ResponseDto<NoContentDto>> DeleteDeviceUserAsync(string deviceToken)
+    {
+        var devices = await _unitOfWork
+            .GetGenericRepository<UserDevice>()
+            .GetAllAsync(x => x.FcmToken == deviceToken);
+
+        var device = devices.FirstOrDefault();
+
+        if (device == null) 
+            return ResponseDto<NoContentDto>
+                .Fail(_errorMessageService.DeviceNotFound, StatusCodes.Status404NotFound);
+
+        device.UserId = null;
+        await _unitOfWork.SaveChangesAsync();
+
+        return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
+        
+    }
+
     public async Task<ResponseDto<NoContentDto>> SaveDeviceTokenAsync(SaveDeviceTokenRequestDto request)
     {
         var validationError = await _validationService.ValidateAsync<SaveDeviceTokenRequestDto, NoContentDto>(request);
