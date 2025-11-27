@@ -27,11 +27,6 @@ namespace Habit.Tracker.Infrastructure.Configurations
             builder.Property(n => n.RetryCount)
                    .IsRequired();
 
-            builder.Property(n => n.SchedulerId)
-                   .IsRequired();
-
-            builder.HasIndex(n => n.SchedulerId);
-
             builder.Property(n => n.UserId)
                    .IsRequired();
 

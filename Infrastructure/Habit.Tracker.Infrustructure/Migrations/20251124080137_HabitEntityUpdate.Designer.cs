@@ -4,6 +4,7 @@ using Habit.Tracker.Infrustructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Habit.Tracker.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251124080137_HabitEntityUpdate")]
+    partial class HabitEntityUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,9 +46,6 @@ namespace Habit.Tracker.Infrastructure.Migrations
                     b.Property<Guid>("HabitId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDone")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("LastNotificationDate")
                         .HasColumnType("datetime2");
 
@@ -57,6 +57,9 @@ namespace Habit.Tracker.Infrastructure.Migrations
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("isDoneToday")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -70,11 +73,6 @@ namespace Habit.Tracker.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("BestStreak")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -206,7 +204,7 @@ namespace Habit.Tracker.Infrastructure.Migrations
                     b.Property<Guid>("HabitId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDone")
+                    b.Property<bool>("IsDoneToday")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastNotificationDate")
@@ -253,7 +251,7 @@ namespace Habit.Tracker.Infrastructure.Migrations
                     b.Property<Guid>("HabitId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsDone")
+                    b.Property<bool>("IsDoneToday")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastNotificationDate")
@@ -296,9 +294,6 @@ namespace Habit.Tracker.Infrastructure.Migrations
                     b.Property<DateTime>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("HabitGroupId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsSent")
                         .HasColumnType("bit");
 
@@ -310,7 +305,7 @@ namespace Habit.Tracker.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("SchedulerId")
+                    b.Property<Guid>("SchedulerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
@@ -327,6 +322,8 @@ namespace Habit.Tracker.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SchedulerId");
 
                     b.HasIndex("UserId");
 

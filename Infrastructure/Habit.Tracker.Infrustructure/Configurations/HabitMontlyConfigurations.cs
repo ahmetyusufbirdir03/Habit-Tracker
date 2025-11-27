@@ -15,6 +15,9 @@ public class HabitMonthlyConfiggurations : IEntityTypeConfiguration<HabitMonthly
         builder.Property(m => m.ReminderTime).IsRequired()
             .HasColumnType("time");
 
+        builder.Property(hd => hd.IsDone)
+            .IsRequired();
+
         builder.HasOne(m => m.Habit)
                .WithMany(h => h.MonthlySchedules)
                .HasForeignKey(m => m.HabitId)

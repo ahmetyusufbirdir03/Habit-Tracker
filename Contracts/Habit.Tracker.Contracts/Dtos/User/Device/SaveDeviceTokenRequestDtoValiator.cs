@@ -16,7 +16,7 @@ public class SaveDeviceTokenRequestDtoValiator : AbstractValidator<SaveDeviceTok
             .WithMessage("FCM token contains invalid characters.");
 
         RuleFor(x => x.Platform)
-            .Must(p => p == null || p.ToLower() is "ios" or "android")
+            .Must(p => p == null || p.ToLower() is "ios" or "android" or "web")
             .WithMessage("Platform must be iOS or Android.");
     }
 }

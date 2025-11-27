@@ -22,6 +22,9 @@ public class HabitWeeklyConfig : IEntityTypeConfiguration<HabitWeekly>
                .IsRequired()
                .HasMaxLength(20);
 
+        builder.Property(hd => hd.IsDone)
+            .IsRequired();
+
         builder.Property(hw => hw.ReminderTime)
                .IsRequired()
                .HasColumnType("time");

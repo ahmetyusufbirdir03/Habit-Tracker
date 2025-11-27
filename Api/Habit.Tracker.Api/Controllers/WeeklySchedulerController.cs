@@ -1,6 +1,4 @@
-﻿using Habit.Tracker.Application.Services;
-using Habit.Tracker.Contracts.Dtos.DailySchedule.Update;
-using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Create;
+﻿using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Create;
 using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Update;
 using Habit.Tracker.Contracts.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +42,14 @@ public class WeeklySchedulerController : BaseController
     public async Task<IActionResult> UpdateWeeklyScheduler(UpdateWeeklySchedulerDto request)
     {
         var response = await _weeklySchedulerService.UpdateWeeklySchedulerAsync(request);
+
+        return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpPatch("{SchedulerId}")]
+    public async Task<IActionResult> CompleteWeeklyScheduler(Guid SchedulerId)
+    {
+        var response = await _weeklySchedulerService.CompleteWeeklySchedulersAsync(SchedulerId);
 
         return StatusCode(response.StatusCode, response);
     }

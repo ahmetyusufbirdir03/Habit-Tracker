@@ -1,9 +1,7 @@
-﻿using Habit.Tracker.Application.Services;
+﻿using Habit.Tracker.Application.Services.SchedulerServices;
 using Habit.Tracker.Contracts.Dtos.MonthlyScheduler.Create;
 using Habit.Tracker.Contracts.Dtos.MonthlyScheduler.Update;
-using Habit.Tracker.Contracts.Dtos.WeeklyScheduler.Create;
 using Habit.Tracker.Contracts.Interfaces.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Habit.Tracker.Api.Controllers
@@ -45,6 +43,14 @@ namespace Habit.Tracker.Api.Controllers
         public async Task<IActionResult> UpdateMonthlySchedulers(UpdateMonthlySchedulerDto request)
         {
             var response = await _monthlySchedulerService.UpdateMonthlySchedulerAsync(request);
+
+            return StatusCode(response.StatusCode, response);
+        }
+
+        [HttpPatch("{SchedulerId}")]
+        public async Task<IActionResult> CompleteMonthlyScheduler(Guid SchedulerId)
+        {
+            var response = await _monthlySchedulerService.CompleteMonthlySchedulerAsync(SchedulerId);
 
             return StatusCode(response.StatusCode, response);
         }

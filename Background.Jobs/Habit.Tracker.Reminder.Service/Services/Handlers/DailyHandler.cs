@@ -1,6 +1,7 @@
 ﻿using Habit.Tracker.Contracts.Dtos.BackgroundDtos;
 using Habit.Tracker.Contracts.Interfaces.BackgroundServices;
 using Habit.Tracker.Contracts.Interfaces.JobHandlers;
+using Habit.Tracker.Domain.Enums;
 using Habit.Tracker.Infrustructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -34,7 +35,7 @@ public class DailyHandler : IDailyHandler
             .Include(x => x.Habit)
                 .ThenInclude(h => h.HabitGroup)
             .Where(hd =>
-                !hd.isDoneToday &&
+                !hd.IsDone &&
                 hd.Habit!.IsActive && 
                 hd.ReminderTime >= startTimeWindow &&
                 hd.ReminderTime <= currentTime &&
@@ -63,12 +64,46 @@ public class DailyHandler : IDailyHandler
                 await _notificationService.SendNotificationAsync(
                     idList,
                     "The Time Has Come! ⏰",
-                    $"{habitName}'s time. Let's get it done!"                    
+                    $"Reminder: {habitName} at {scheduler.ReminderTime.ToString(@"hh\:mm")}. Let's get it done!"              
                 );
 
                 scheduler.LastNotificationDate = DateTime.Now;
             }
             await _dbContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task ResetDailySchedulersAsync()
+    {
+        _logger.LogInformation("ResetDailySchedulersAsync()");
+        var habits = await _dbContext.Habits
+                .Include(h => h.DailySchedules) 
+                .Where(h  => h.PeriodType == PeriodTypeEnum.Daily)
+                .ToListAsync();
+
+        if (!habits.Any()) return;
+
+        foreach (var habit in habits)
+        {
+            if (!habit.IsDone)
+            {
+                if (habit.Streak > 0)
+                {
+                    _logger.LogInformation("Daily Streak Reset");
+                    habit.Streak = 0;
+                }
+            }
+
+            habit.IsDone = false;
+
+            if (habit.DailySchedules != null)
+            {
+                foreach (var scheduler in habit.DailySchedules)
+                {
+                    _logger.LogInformation("Daily Scheduler isDone Reset");
+                    scheduler.IsDone = false;
+                }
+            }
         }
     }
 }

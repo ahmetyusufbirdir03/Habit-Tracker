@@ -6,6 +6,9 @@ using Habit.Tracker.Contracts;
 using Habit.Tracker.Infrastructure;
 using Habit.Tracker.Reminder.Service;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 
 
 
@@ -22,25 +25,53 @@ var solutionRoot = Directory.GetParent(apiDir ?? "")?.FullName;
 
 var envPath = Path.Combine(solutionRoot ?? "", ".env");
 
-Console.WriteLine($"Solution Root: {solutionRoot}");
-Console.WriteLine($".env Path: {envPath}");
-Console.WriteLine($".env Exists: {File.Exists(envPath)}");
+//Console.WriteLine($"Solution Root: {solutionRoot}");
+//Console.WriteLine($".env Path: {envPath}");
+//Console.WriteLine($".env Exists: {File.Exists(envPath)}");
 
 if (File.Exists(envPath))
 {
     Env.Load(envPath);
-    Console.WriteLine(".env loaded successfully!");
+    //Console.WriteLine(".env loaded successfully!");
 }
 else
 {
-    Console.WriteLine(".env NOT FOUND!");
+    //Console.WriteLine(".env NOT FOUND!");
 }
+
+builder.Logging.ClearProviders();
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+
+    // DbSorguları kapalı -> açık : LogEventLevel.Information
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", LogEventLevel.Warning)
+
+    // Microsoft bildirimleri kalapalı -> açık : LogEventLevel.Information
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+
+    .WriteTo.Console(
+        theme: AnsiConsoleTheme.Code,
+        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} <{SourceContext}>{NewLine}{Exception}"
+    )
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 builder.Services.AddBackgroundJobs(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -96,6 +127,8 @@ if (app.Environment.IsDevelopment())
 app.ConfigureExceptionHandlingMiddleware();
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 

@@ -46,6 +46,33 @@ public class WeeklySchedulerService : IWeeklySchedulerService
         return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 
+    public async Task<ResponseDto<NoContentDto>> CompleteWeeklySchedulersAsync(Guid schedulerId)
+    {
+        var scheduler = await _unitOfWork.GetGenericRepository<HabitWeekly>().GetByIdAsync(schedulerId);
+        if (scheduler == null)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.SchedulerNotFound, StatusCodes.Status404NotFound);
+
+        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(scheduler.HabitId, h => h.WeeklySchedules);
+        if (habit == null)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
+
+        scheduler.IsDone = true;
+
+        if (habit.WeeklySchedules != null && habit.WeeklySchedules.All(item => item.IsDone))
+        {
+            habit.IsDone = true;
+            habit.Streak += 1;
+            if (habit.Streak > habit.BestStreak)
+            {
+                habit.BestStreak = habit.Streak;
+            }
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
+    }
+
     public async Task<ResponseDto<NoContentDto>> CreateWeeklySchedulerAsync(CreateWeeklySchedulerDto request)
     {
         var validationError = await _validationService.ValidateAsync<CreateWeeklySchedulerDto, NoContentDto>(request);

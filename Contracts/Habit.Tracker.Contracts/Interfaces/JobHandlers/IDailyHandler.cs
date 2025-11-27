@@ -3,4 +3,5 @@
 public interface IDailyHandler
 {
     Task CheckDailySchedulersAsync();
+    Task ResetDailySchedulersAsync();
 }

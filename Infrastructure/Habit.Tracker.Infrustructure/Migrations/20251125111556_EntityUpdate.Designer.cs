@@ -4,6 +4,7 @@ using Habit.Tracker.Infrustructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Habit.Tracker.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251125111556_EntityUpdate")]
+    partial class EntityUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -296,9 +299,6 @@ namespace Habit.Tracker.Infrastructure.Migrations
                     b.Property<DateTime>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("HabitGroupId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsSent")
                         .HasColumnType("bit");
 
@@ -310,7 +310,7 @@ namespace Habit.Tracker.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("SchedulerId")
+                    b.Property<Guid>("SchedulerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
@@ -327,6 +327,8 @@ namespace Habit.Tracker.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SchedulerId");
 
                     b.HasIndex("UserId");
 

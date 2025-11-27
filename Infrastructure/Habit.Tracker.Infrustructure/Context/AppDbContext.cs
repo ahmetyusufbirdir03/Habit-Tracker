@@ -21,6 +21,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>
     public DbSet<HabitMonthly> HabitMonthly { get; set; }
     public DbSet<HabitWeekly> HabitWeekly { get; set; }
     public DbSet<UserDevice> UserDevices { get; set; }
+    public DbSet<SpecialReminder> SpecialReminder { get; set; }
     public DbSet<Notification> Notification { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

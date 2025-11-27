@@ -11,4 +11,5 @@ public interface IWeeklySchedulerService
     public Task<ResponseDto<NoContentDto>> UpdateWeeklySchedulerAsync(UpdateWeeklySchedulerDto request);
     public Task<ResponseDto<IList<WeeklySchedulerResponseDto>>> GetWeeklySchedulersAsync(Guid habitId);
     public Task<ResponseDto<NoContentDto>> ClearWeeklySchedulersAsync(Guid habitId);
+    public Task<ResponseDto<NoContentDto>> CompleteWeeklySchedulersAsync(Guid schedulerId);
 }
