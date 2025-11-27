@@ -3,7 +3,6 @@ using Habit.Tracker.Application.Services.UtilServices;
 using Habit.Tracker.Contracts.Dtos;
 using Habit.Tracker.Contracts.Dtos.Habit;
 using Habit.Tracker.Contracts.Dtos.Habit.Create;
-using Habit.Tracker.Contracts.Dtos.Habit.DetailDto;
 using Habit.Tracker.Contracts.Dtos.Habit.Update;
 using Habit.Tracker.Contracts.Dtos.Habit.Update.Note;
 using Habit.Tracker.Contracts.Interfaces;
@@ -35,6 +34,7 @@ public class HabitService : IHabitService
         _mapper = mapper;
         _habitRepository = habitRepository;
     }
+
     public async Task<ResponseDto<NoContentDto>> CreateHabit(CreateHabitRequestDto request)
     {
         var validationError = await _validationService.ValidateAsync<CreateHabitRequestDto, NoContentDto>(request);
@@ -60,6 +60,7 @@ public class HabitService : IHabitService
 
         HabitEntity habit = _mapper.Map<HabitEntity>(request);
         habit.IsActive = false;
+        habit.IsDone = false;
         habit.CreatedDate = DateTime.UtcNow;
 
         await _unitOfWork.GetGenericRepository<HabitEntity>().CreateAsync(habit);
@@ -77,16 +78,16 @@ public class HabitService : IHabitService
         return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 
-    public async Task<ResponseDto<IList<HabitDetailDto>>> GetAllHabits()
+    public async Task<ResponseDto<IList<HabitResponseDto>>> GetAllHabits()
     {
         var habits = await _habitRepository.GetHabitsWithSchedulersAsync();
 
         if (habits == null)
-            return ResponseDto<IList<HabitDetailDto>>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
+            return ResponseDto<IList<HabitResponseDto>>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
 
-        var _habits = _mapper.Map<IList<HabitDetailDto>>(habits);
+        var _habits = _mapper.Map<IList<HabitResponseDto>>(habits);
 
-        return ResponseDto<IList<HabitDetailDto>>.Success(_habits);
+        return ResponseDto<IList<HabitResponseDto>>.Success(_habits);
     }
 
     public async Task<ResponseDto<IList<HabitResponseDto>>> GetHabitsByGroupIdAsync(Guid groupId)
@@ -142,6 +143,9 @@ public class HabitService : IHabitService
 
             if (request.Frequency.HasValue)
                 habit.Frequency = request.Frequency.Value;
+            habit.Streak = 0;
+            habit.BestStreak = 0;
+            habit.IsDone = false;
         }
 
         if (!string.IsNullOrWhiteSpace(request.Name))

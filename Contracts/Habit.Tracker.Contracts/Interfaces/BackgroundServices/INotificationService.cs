@@ -11,4 +11,9 @@ public interface INotificationService
         IdListDto idList,
         string title, 
         string message);
+
+    Task<bool> SendSpecialNotificationAsync(
+        SpecialReminderNotificationDto specialReminder,
+        string title,
+        string message);
 }

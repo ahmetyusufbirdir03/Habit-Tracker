@@ -48,6 +48,7 @@ namespace Habit.Tracker.Application.Services.UtilServices
         public string ThisTimerAlreadyExist => _localizer["This timer already exists"];
         public string ScheduleDaysConflict => _localizer["The days are conflicts each other. Please choose unique days"];
         public string HasAlreadySchedulers => _localizer["This habit already has schedulers"];
+        public string SchedulerAlreadyDone => _localizer["Scheduler is already done"];
 
         //SPECIAL REMINDERS
         public string MaxReminderCount => _localizer["Max reminder count - 10"];

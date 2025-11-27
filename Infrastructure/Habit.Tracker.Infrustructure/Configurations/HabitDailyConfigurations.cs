@@ -18,7 +18,7 @@ public class HabitDailyConfig : IEntityTypeConfiguration<HabitDaily>
         builder.Property(hd => hd.HabitId)
                .IsRequired();
 
-        builder.Property(hd => hd.isDoneToday)
+        builder.Property(hd => hd.IsDone)
             .IsRequired();
 
 

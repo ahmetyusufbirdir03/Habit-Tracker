@@ -23,6 +23,10 @@ public class HabitConfig : IEntityTypeConfiguration<HabitEntity>
                .IsRequired()
                .HasDefaultValue(0);
 
+        builder.Property(h => h.BestStreak)
+               .IsRequired()
+               .HasDefaultValue(0);
+
         builder.Property(h => h.PeriodType)
                .IsRequired();
 
@@ -30,6 +34,10 @@ public class HabitConfig : IEntityTypeConfiguration<HabitEntity>
                .IsRequired();
 
         builder.Property(h => h.IsActive)
+               .IsRequired()
+               .HasDefaultValue(false);
+
+        builder.Property(h => h.IsDone)
                .IsRequired()
                .HasDefaultValue(false);
 

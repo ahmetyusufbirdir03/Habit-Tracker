@@ -45,5 +45,13 @@ namespace Habit.Tracker.Api.Controllers
 
             return StatusCode(response.StatusCode, response);
         }
+
+        [HttpPost("{SchedulerId}")]
+        public async Task<IActionResult> CompleteDailyScheduler(Guid SchedulerId)
+        {
+            var response = await _dailyScheduleService.CompleteDailyScheduler(SchedulerId);
+
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }

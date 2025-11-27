@@ -19,8 +19,4 @@
     <ProjectReference Include="..\..\Domain\Habit.Tracker.Domain\Habit.Tracker.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\BackgroundDtos\Notification\" />
-  </ItemGroup>
-
 </Project>

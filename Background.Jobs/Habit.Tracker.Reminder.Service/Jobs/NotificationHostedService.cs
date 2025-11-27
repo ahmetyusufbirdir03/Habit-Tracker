@@ -9,6 +9,7 @@ public class NotificationHostedService : BackgroundService
 {
     private ILogger<NotificationHostedService> _logger;
     private readonly IServiceScopeFactory _scopeFactory;
+    DateTime? lastRunDate = null;
 
     public NotificationHostedService(ILogger<NotificationHostedService> logger,
         IServiceScopeFactory scopeFactory)
@@ -26,6 +27,25 @@ public class NotificationHostedService : BackgroundService
                 using var scope = _scopeFactory.CreateScope();
                 var _dailyHandler = scope.ServiceProvider.GetRequiredService<IDailyHandler>();
                 await _dailyHandler.CheckDailySchedulersAsync();
+
+                var _weeklyHandler = scope.ServiceProvider.GetRequiredService<IWeeklyHandler>();
+                await _weeklyHandler.CheckWeeklySchedulersAsync();
+
+                var _monthlyHandler = scope.ServiceProvider.GetRequiredService<IMonthlyHandler>();
+                await _monthlyHandler.CheckMonthlySchedulersAsync();
+
+                var _specialReminderHandler = scope.ServiceProvider.GetRequiredService<ISpecialReminderHandler>();
+                var now = DateTime.Now;
+
+                if (now.Hour == 7)
+                {
+                    if (lastRunDate != now.Date)
+                    {
+                        await _specialReminderHandler.CheckSpecialReminders();
+                        lastRunDate = now.Date;
+                    }
+                }
+
             }
             catch (Exception ex)
             {

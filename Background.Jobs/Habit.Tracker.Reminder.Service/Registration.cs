@@ -3,6 +3,7 @@ using Google.Apis.Auth.OAuth2;
 using Habit.Tracker.Contracts.Interfaces.BackgroundServices;
 using Habit.Tracker.Contracts.Interfaces.JobHandlers;
 using Habit.Tracker.Reminder.Service.Jobs;
+using Habit.Tracker.Reminder.Service.Services;
 using Habit.Tracker.Reminder.Service.Services.Handlers;
 using Habit.Tracker.Reminder.Service.Services.NotificationServices;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +17,13 @@ public static class Registration
     public static void AddBackgroundJobs(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHostedService<NotificationHostedService>();
+        services.AddHostedService<HabitResetHostedService>();
+
         services.AddScoped(typeof(IDailyHandler), typeof(DailyHandler));
+        services.AddScoped(typeof(IWeeklyHandler), typeof(WeeklyHandler));
+        services.AddScoped(typeof(IMonthlyHandler), typeof(MonthlyHandler));
+        services.AddScoped(typeof(ISpecialReminderHandler), typeof(SpecialReminderHandler));
+        services.AddScoped(typeof(IHabitResetService), typeof(HabitResetService));
         services.AddScoped(typeof(INotificationService), typeof(NotificationService));
 
         string basePath = AppDomain.CurrentDomain.BaseDirectory;

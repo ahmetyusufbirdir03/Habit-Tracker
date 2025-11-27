@@ -49,6 +49,34 @@ public class MonthlySchedulerService : IMonthlySchedulerService
         return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 
+    public async Task<ResponseDto<NoContentDto>> CompleteMonthlySchedulerAsync(Guid schedulerId)
+    {
+        var scheduler = await _unitOfWork.GetGenericRepository<HabitMonthly>().GetByIdAsync(schedulerId);
+        if (scheduler == null)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.SchedulerNotFound, StatusCodes.Status404NotFound);
+
+        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(scheduler.HabitId, h => h.MonthlySchedules);
+        if (habit == null)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
+
+        scheduler.IsDone = true;
+
+        if (habit.MonthlySchedules.All(item => item.IsDone))
+        {
+            habit.IsDone = true;
+            habit.Streak += 1;
+            if (habit.Streak > habit.BestStreak)
+            {
+                habit.BestStreak = habit.Streak;
+            }
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
+    }
+
+
     public async Task<ResponseDto<NoContentDto>> CreateMonthlySchedulerAsync(CreateMonthlySchedulerDto request)
     {
         //REQUEST VALIDATION

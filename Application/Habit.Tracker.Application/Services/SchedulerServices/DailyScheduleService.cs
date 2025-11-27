@@ -47,6 +47,33 @@ public class DailyScheduleService : IDailyScheduleService
         return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
     }
 
+    public async Task<ResponseDto<NoContentDto>> CompleteDailyScheduler(Guid schedulerId)
+    {
+        var scheduler = await _unitOfWork.GetGenericRepository<HabitDaily>().GetByIdAsync(schedulerId);
+        if (scheduler == null)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.SchedulerNotFound, StatusCodes.Status404NotFound);
+
+        var habit = await _unitOfWork.GetGenericRepository<HabitEntity>().GetByIdAsync(scheduler.HabitId, h => h.DailySchedules);
+        if (habit == null)
+            return ResponseDto<NoContentDto>.Fail(_errorMessageService.HabitNotFound, StatusCodes.Status404NotFound);
+
+        scheduler.IsDone = true;
+
+        if (habit.DailySchedules.All(item => item.IsDone))
+        {
+            habit.IsDone = true;
+            habit.Streak += 1;
+            if (habit.Streak > habit.BestStreak)
+            {
+                habit.BestStreak = habit.Streak;
+            }
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);
+    }
+
     public async Task<ResponseDto<NoContentDto>> CreateDailyScheduleAsync(CreateDailyScheduleRequestDto request)
     {
         var validationError = await _validationService.ValidateAsync<CreateDailyScheduleRequestDto, NoContentDto>(request);
