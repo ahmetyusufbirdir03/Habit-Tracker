@@ -1,0 +1,1 @@
+final String defaultProfilePictureUrl = "https://i0.wp.com/picjumbo.com/wp-content/uploads/abstract-wallpaper-mountains-with-a-neon-glowing-circle-free-photo.jpeg?w=2210&quality=70";
