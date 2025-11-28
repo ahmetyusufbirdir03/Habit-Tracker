@@ -19,11 +19,6 @@ public class NotificationService : INotificationService
         _dbContext = dbContext;
     }
 
-    public Task<Guid> CreateNotificationAsync()
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<bool> SendNotificationAsync(
         IdListDto idList,
         string title,
@@ -180,7 +175,6 @@ public class NotificationService : INotificationService
         return anySuccess;
     }
 
-
     private async Task<bool> SendWithRetryAsync(Message message)
     {
         int maxRetries = 3;
@@ -203,6 +197,5 @@ public class NotificationService : INotificationService
         }
         return false;
     }
-
 }
     
