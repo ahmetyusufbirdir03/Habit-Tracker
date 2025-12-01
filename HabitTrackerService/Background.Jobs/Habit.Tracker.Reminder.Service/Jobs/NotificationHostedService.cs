@@ -37,7 +37,7 @@ public class NotificationHostedService : BackgroundService
                 var _specialReminderHandler = scope.ServiceProvider.GetRequiredService<ISpecialReminderHandler>();
                 var now = DateTime.Now;
 
-                if (now.Hour == 7)
+                if (now.Hour == 14)
                 {
                     if (lastRunDate != now.Date)
                     {

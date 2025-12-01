@@ -57,7 +57,7 @@ public class SpecialReminderHandler : ISpecialReminderHandler
                 await _notificationService.SendSpecialNotificationAsync(
                     specialReminder,
                     "The Time Has Come! ⏰",
-                    $"Special Reminder: {reminder.Title} on {formattedDate}. Let's get it done!" +
+                    $"Special Reminder: {reminder.Title} on {formattedDate}. Dont forget about it!" +
                     $"\n {reminder.Description}"
                 );
 
